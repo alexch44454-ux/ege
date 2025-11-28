@@ -969,6 +969,7 @@
 
         // Состояние для режима "9 задание"
         let task9Words = [];
+        let task9AllWords = []; // Все загруженные слова
         let currentTask9Word = null;
         let task9CurrentIndex = 0;
         let task9Correct = 0;
@@ -988,16 +989,16 @@
                 // Пытаемся загрузить из JSON файла
                 const response = await fetch('words_task9.json');
                 if (response.ok) {
-                    task9Words = await response.json();
-                    console.log(`Загружено ${task9Words.length} слов из файла`);
+                    task9AllWords = await response.json();
+                    console.log(`Загружено ${task9AllWords.length} слов из файла`);
                 } else {
                     // Если файл не найден, используем примерные данные
                     console.log('Файл words_task9.json не найден, используем примерные данные');
-                    task9Words = getDefaultTask9Words();
+                    task9AllWords = getDefaultTask9Words();
                 }
             } catch (error) {
                 console.log('Ошибка загрузки слов, используем примерные данные:', error);
-                task9Words = getDefaultTask9Words();
+                task9AllWords = getDefaultTask9Words();
             }
         }
 
@@ -1334,13 +1335,16 @@
 
         // Запуск задания 9
         function startTask9() {
-            if (task9Words.length === 0) {
+            if (task9AllWords.length === 0) {
                 alert('Слова не загружены. Пожалуйста, загрузите файл words_task9.json');
                 return;
             }
 
-            // Перемешиваем слова
-            task9Words = task9Words.sort(() => Math.random() - 0.5);
+            // Выбираем 10 случайных слов из всех доступных
+            const allWords = [...task9AllWords];
+            const shuffled = allWords.sort(() => Math.random() - 0.5);
+            task9Words = shuffled.slice(0, 10); // Берем только первые 10 после перемешивания
+            
             task9CurrentIndex = 0;
             task9Correct = 0;
             task9Total = 0;
