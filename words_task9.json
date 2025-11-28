@@ -1,0 +1,63 @@
+[
+  {
+    "word_with_gap": "пр_брежный",
+    "correct_vowel": "и",
+    "full_word": "прибрежный",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_одолеть",
+    "correct_vowel": "е",
+    "full_word": "преодолеть",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_образовать",
+    "correct_vowel": "е",
+    "full_word": "преобразовать",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_следовать",
+    "correct_vowel": "е",
+    "full_word": "преследовать",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_бывать",
+    "correct_vowel": "е",
+    "full_word": "пребывать",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_дать",
+    "correct_vowel": "е",
+    "full_word": "предать",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_близиться",
+    "correct_vowel": "и",
+    "full_word": "приблизиться",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_лечь",
+    "correct_vowel": "и",
+    "full_word": "прилечь",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_быть",
+    "correct_vowel": "и",
+    "full_word": "прибыть",
+    "position": 2
+  },
+  {
+    "word_with_gap": "пр_творить",
+    "correct_vowel": "е",
+    "full_word": "претворить",
+    "position": 2
+  }
+]
+
