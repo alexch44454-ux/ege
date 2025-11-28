@@ -51,31 +51,67 @@
 
         /* Экран выбора уровней */
         .level-select-screen {
-            background: linear-gradient(180deg, #87CEEB 0%, #98D8C8 50%, #F7DC6F 100%);
-            padding: 20px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 0;
             overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .level-select-screen::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .level-select-screen::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .level-select-screen::-webkit-scrollbar-thumb {
+            background: rgba(72, 187, 120, 0.5);
+            border-radius: 4px;
         }
 
         .level-select-header {
             text-align: center;
-            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .level-select-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .level-select-header p {
-            font-size: 16px;
-            opacity: 0.9;
+            font-size: 14px;
+            opacity: 0.8;
         }
 
         .path-container {
             position: relative;
-            min-height: 400px;
-            padding: 20px 0;
+            min-height: calc(100vh - 100px);
+            padding: 40px 20px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .start-label {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(72, 187, 120, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 4;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .path-line {
@@ -83,23 +119,34 @@
             left: 50%;
             top: 0;
             bottom: 0;
-            width: 6px;
-            background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
+            width: 8px;
+            background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
             transform: translateX(-50%);
-            border-radius: 3px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            z-index: 1;
         }
 
         .levels-list {
             position: relative;
             z-index: 2;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 30px;
+            padding-top: 20px;
         }
 
         .level-item {
             display: flex;
             align-items: center;
-            margin-bottom: 40px;
             position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .level-item:nth-child(odd) {
+            flex-direction: row;
         }
 
         .level-item:nth-child(even) {
@@ -107,38 +154,61 @@
         }
 
         .level-node {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             z-index: 3;
             border: 4px solid;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            flex-shrink: 0;
         }
 
         .level-node.locked {
-            background: #888;
-            border-color: #666;
+            background: #4a5568;
+            border-color: #2d3748;
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .level-node.available {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            border-color: #2E7D32;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            border-color: #2f855a;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(72, 187, 120, 0.6);
         }
 
         .level-node.completed {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            border-color: #FF8C00;
+            background: linear-gradient(135deg, #f6e05e, #ecc94b);
+            border-color: #d69e2e;
+        }
+
+        .level-node.available::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #48bb78;
+            animation: ring-pulse 2s infinite;
+        }
+
+        @keyframes ring-pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
         }
 
         @keyframes pulse {
@@ -152,27 +222,59 @@
 
         .level-info {
             flex: 1;
-            margin: 0 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
+            margin: 0 15px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .level-info h3 {
-            font-size: 20px;
-            margin-bottom: 5px;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #fff;
         }
 
         .level-info p {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 12px;
+            opacity: 0.8;
+            color: #e2e8f0;
         }
 
         .level-stars {
             margin-top: 5px;
-            font-size: 18px;
+            font-size: 16px;
+        }
+
+        .player-character {
+            position: absolute;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        .player-character:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         /* Экран игры */
@@ -420,6 +522,7 @@
             <div class="path-container">
                 <div class="path-line"></div>
                 <div class="levels-list" id="levelsList"></div>
+                <div class="start-label">НАЧАТЬ</div>
             </div>
         </div>
 
@@ -667,9 +770,12 @@
             const levelsList = document.getElementById('levelsList');
             levelsList.innerHTML = '';
 
+            // Отображаем уровни в обычном порядке (column-reverse покажет их снизу вверх)
             levels.forEach((level, index) => {
                 const isCompleted = completedLevels[level.id];
-                const isAvailable = index === 0 || completedLevels[levels[index - 1].id];
+                // Уровень доступен, если это первый уровень или предыдущий пройден
+                const prevLevel = index > 0 ? levels[index - 1] : null;
+                const isAvailable = index === 0 || (prevLevel && completedLevels[prevLevel.id]);
 
                 const levelItem = document.createElement('div');
                 levelItem.className = 'level-item';
@@ -679,7 +785,7 @@
                 
                 if (isCompleted) {
                     levelNode.classList.add('completed');
-                    levelNode.textContent = '✓';
+                    levelNode.textContent = '⭐';
                 } else if (isAvailable) {
                     levelNode.classList.add('available');
                     levelNode.textContent = level.id;
@@ -701,6 +807,19 @@
                 levelItem.appendChild(levelInfo);
                 levelsList.appendChild(levelItem);
             });
+
+            // Добавляем персонажа
+            const playerChar = document.createElement('div');
+            playerChar.className = 'player-character';
+            playerChar.textContent = '🦉';
+            playerChar.title = 'Ваш прогресс';
+            document.querySelector('.path-container').appendChild(playerChar);
+
+            // Прокручиваем вниз (к первому уровню) при загрузке
+            setTimeout(() => {
+                const levelSelectScreen = document.getElementById('levelSelectScreen');
+                levelSelectScreen.scrollTop = levelSelectScreen.scrollHeight;
+            }, 100);
         }
 
         // Запуск уровня
@@ -929,5 +1048,6 @@
     </script>
 </body>
 </html>
+
 
 
