@@ -34,6 +34,152 @@
             overflow: hidden;
         }
 
+        /* Экраны */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none;
+            flex-direction: column;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Экран выбора уровней */
+        .level-select-screen {
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8C8 50%, #F7DC6F 100%);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .level-select-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .level-select-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-select-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .path-container {
+            position: relative;
+            min-height: 400px;
+            padding: 20px 0;
+        }
+
+        .path-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
+            transform: translateX(-50%);
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .levels-list {
+            position: relative;
+            z-index: 2;
+        }
+
+        .level-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .level-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .level-node {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 3;
+            border: 4px solid;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-node.locked {
+            background: #888;
+            border-color: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .level-node.available {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-color: #2E7D32;
+            animation: pulse 2s infinite;
+        }
+
+        .level-node.completed {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-color: #FF8C00;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .level-info {
+            flex: 1;
+            margin: 0 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .level-info h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .level-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .level-stars {
+            margin-top: 5px;
+            font-size: 18px;
+        }
+
+        /* Экран игры */
+        .game-screen {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
         .header {
             padding: 20px;
             text-align: center;
@@ -175,7 +321,7 @@
             }
         }
 
-        .game-over {
+        .level-complete {
             position: absolute;
             top: 0;
             left: 0;
@@ -190,11 +336,11 @@
             padding: 20px;
         }
 
-        .game-over.show {
+        .level-complete.show {
             display: flex;
         }
 
-        .game-over h2 {
+        .level-complete h2 {
             font-size: 32px;
             margin-bottom: 20px;
         }
@@ -209,7 +355,7 @@
             margin: 10px 0;
         }
 
-        .restart-btn {
+        .btn {
             padding: 15px 30px;
             background: #4caf50;
             border: none;
@@ -218,11 +364,20 @@
             font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 5px;
         }
 
-        .restart-btn:hover {
+        .btn:hover {
             background: #45a049;
             transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #2196F3;
+        }
+
+        .btn-secondary:hover {
+            background: #1976D2;
         }
 
         .progress-bar {
@@ -238,46 +393,78 @@
             background: #4caf50;
             transition: width 0.3s ease;
         }
+
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 20;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <div class="header">
-            <h1>🎮 ЕГЭ Аркада</h1>
-            <div class="stats">
-                <div class="stat-item">
-                    <span>Очки</span>
-                    <span class="stat-value" id="score">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Правильно</span>
-                    <span class="stat-value" id="correct">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Вопрос</span>
-                    <span class="stat-value" id="questionNum">0</span>
-                </div>
+        <!-- Экран выбора уровней -->
+        <div class="screen level-select-screen active" id="levelSelectScreen">
+            <div class="level-select-header">
+                <h1>🗺️ Выберите уровень</h1>
+                <p>Проходите уровни по порядку</p>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress"></div>
+            <div class="path-container">
+                <div class="path-line"></div>
+                <div class="levels-list" id="levelsList"></div>
             </div>
         </div>
 
-        <div class="game-area" id="gameArea"></div>
-
-        <div class="question-container" id="questionContainer">
-            <div class="question-text" id="questionText"></div>
-            <div class="answers" id="answers"></div>
-        </div>
-
-        <div class="game-over" id="gameOver">
-            <h2>🎉 Игра завершена!</h2>
-            <div class="final-stats">
-                <p>🏆 Очки: <span id="finalScore">0</span></p>
-                <p>✅ Правильных: <span id="finalCorrect">0</span>/<span id="finalTotal">0</span></p>
-                <p>📈 Точность: <span id="finalAccuracy">0</span>%</p>
+        <!-- Экран игры -->
+        <div class="screen game-screen" id="gameScreen">
+            <button class="back-btn" onclick="backToLevelSelect()">← Назад</button>
+            <div class="header">
+                <h1 id="levelTitle">🎮 ЕГЭ Аркада</h1>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span>Очки</span>
+                        <span class="stat-value" id="score">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Правильно</span>
+                        <span class="stat-value" id="correct">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Вопрос</span>
+                        <span class="stat-value" id="questionNum">0</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress"></div>
+                </div>
             </div>
-            <button class="restart-btn" onclick="restartGame()">Играть снова</button>
+
+            <div class="game-area" id="gameArea"></div>
+
+            <div class="question-container" id="questionContainer">
+                <div class="question-text" id="questionText"></div>
+                <div class="answers" id="answers"></div>
+            </div>
+
+            <div class="level-complete" id="levelComplete">
+                <h2>🎉 Уровень пройден!</h2>
+                <div class="final-stats">
+                    <p>🏆 Очки: <span id="finalScore">0</span></p>
+                    <p>✅ Правильных: <span id="finalCorrect">0</span>/<span id="finalTotal">0</span></p>
+                    <p>📈 Точность: <span id="finalAccuracy">0</span>%</p>
+                    <p>⭐ Звезды: <span id="finalStars">0</span></p>
+                </div>
+                <button class="btn" onclick="backToLevelSelect()">К карте уровней</button>
+                <button class="btn btn-secondary" onclick="restartLevel()">Повторить уровень</button>
+            </div>
         </div>
     </div>
 
@@ -289,100 +476,177 @@
             tg.expand();
         }
 
-        // Вопросы для ЕГЭ по русскому языку
-        const questions = [
+        // Уровни с вопросами
+        const levels = [
             {
-                question: "В каком слове пропущена буква Е?",
-                answers: ["пр..брежный", "пр..одолеть", "пр..образовать", "пр..следовать"],
-                correct: 0,
-                explanation: "Правильно: прибрежный (приставка ПРИ- означает 'близость')"
+                id: 1,
+                title: "Уровень 1: Орфография",
+                description: "Правописание приставок",
+                questions: [
+                    {
+                        question: "В каком слове пропущена буква Е?",
+                        answers: ["пр..брежный", "пр..одолеть", "пр..образовать", "пр..следовать"],
+                        correct: 0,
+                        explanation: "Правильно: прибрежный (приставка ПРИ- означает 'близость')"
+                    },
+                    {
+                        question: "В каком слове пишется И?",
+                        answers: ["пр..бывать в городе", "пр..бывать в неведении", "пр..дать друга", "пр..дать форму"],
+                        correct: 1,
+                        explanation: "Пребывать в неведении - приставка ПРЕ- (значение 'очень')"
+                    },
+                    {
+                        question: "В каком слове пишется одна буква Н?",
+                        answers: ["деревя..ый", "стекля..ый", "оловя..ый", "ветре..ый"],
+                        correct: 3,
+                        explanation: "Ветреный пишется с одной Н (исключение)"
+                    }
+                ]
             },
             {
-                question: "В каком предложении НЕ со словом пишется раздельно?",
-                answers: [
-                    "Это (не)известный писатель.",
-                    "Он (не)высокий, а низкий.",
-                    "Задача (не)решена.",
-                    "Он (не)приятный человек."
-                ],
-                correct: 1,
-                explanation: "НЕ пишется раздельно, если есть противопоставление с союзом 'а'"
+                id: 2,
+                title: "Уровень 2: Пунктуация",
+                description: "Знаки препинания",
+                questions: [
+                    {
+                        question: "Укажите предложение с пунктуационной ошибкой:",
+                        answers: [
+                            "Солнце, которое светило ярко, согревало землю.",
+                            "Он пришел, но она уже ушла.",
+                            "В лесу, где мы гуляли, было тихо.",
+                            "Я не знаю, что делать."
+                        ],
+                        correct: 0,
+                        explanation: "В первом предложении запятая перед 'которое' не нужна"
+                    },
+                    {
+                        question: "В каком предложении нужно поставить тире?",
+                        answers: [
+                            "Москва столица России.",
+                            "Москва это столица России.",
+                            "Москва была столицей России.",
+                            "Москва стала столицей России."
+                        ],
+                        correct: 0,
+                        explanation: "Тире ставится между подлежащим и сказуемым, выраженными существительными"
+                    },
+                    {
+                        question: "Где нужна запятая?",
+                        answers: [
+                            "Он пришел(,) но она ушла.",
+                            "Он пришел но(,) она ушла.",
+                            "Он пришел но она(,) ушла.",
+                            "Запятая не нужна"
+                        ],
+                        correct: 0,
+                        explanation: "Запятая ставится перед союзом 'но'"
+                    }
+                ]
             },
             {
-                question: "Укажите предложение с пунктуационной ошибкой:",
-                answers: [
-                    "Солнце, которое светило ярко, согревало землю.",
-                    "Он пришел, но она уже ушла.",
-                    "В лесу, где мы гуляли, было тихо.",
-                    "Я не знаю, что делать."
-                ],
-                correct: 0,
-                explanation: "В первом предложении запятая перед 'которое' не нужна, так как это определяемое слово"
+                id: 3,
+                title: "Уровень 3: Грамматика",
+                description: "Морфология и синтаксис",
+                questions: [
+                    {
+                        question: "В каком предложении НЕ со словом пишется раздельно?",
+                        answers: [
+                            "Это (не)известный писатель.",
+                            "Он (не)высокий, а низкий.",
+                            "Задача (не)решена.",
+                            "Он (не)приятный человек."
+                        ],
+                        correct: 1,
+                        explanation: "НЕ пишется раздельно, если есть противопоставление с союзом 'а'"
+                    },
+                    {
+                        question: "Укажите предложение с грамматической ошибкой:",
+                        answers: [
+                            "Он пришел согласно расписанию.",
+                            "Благодаря дождю, урожай был хорошим.",
+                            "По приезду в город, он сразу пошел в музей.",
+                            "Вопреки ожиданиям, все прошло хорошо."
+                        ],
+                        correct: 2,
+                        explanation: "Правильно: по приезде (предлог ПО требует дательного падежа)"
+                    },
+                    {
+                        question: "В каком слове пишется Ь?",
+                        answers: ["плащ..", "мыш..", "ноч..", "ключ.."],
+                        correct: 1,
+                        explanation: "Мягкий знак пишется после шипящих в существительных женского рода 3-го склонения"
+                    }
+                ]
             },
             {
-                question: "В каком слове ударение падает на первый слог?",
-                answers: ["звонИт", "квартАл", "дОговор", "средствА"],
-                correct: 2,
-                explanation: "Правильно: дОговор (ударение на первый слог)"
+                id: 4,
+                title: "Уровень 4: Ударения",
+                description: "Орфоэпия",
+                questions: [
+                    {
+                        question: "В каком слове ударение падает на первый слог?",
+                        answers: ["звонИт", "квартАл", "дОговор", "средствА"],
+                        correct: 2,
+                        explanation: "Правильно: дОговор (ударение на первый слог)"
+                    },
+                    {
+                        question: "В каком слове ударение падает на последний слог?",
+                        answers: ["звонИт", "квартАл", "дОговор", "средствА"],
+                        correct: 0,
+                        explanation: "Правильно: звонИт (ударение на последний слог)"
+                    },
+                    {
+                        question: "В каком слове ударение падает на второй слог?",
+                        answers: ["звонИт", "квартАл", "дОговор", "средствА"],
+                        correct: 1,
+                        explanation: "Правильно: квартАл (ударение на второй слог)"
+                    }
+                ]
             },
             {
-                question: "Выберите правильный вариант:",
-                answers: [
-                    "Одеть пальто",
-                    "Надеть пальто",
-                    "Одеться пальто",
-                    "Надеться пальто"
-                ],
-                correct: 1,
-                explanation: "Правильно: надеть пальто (надеть что-то на себя)"
-            },
-            {
-                question: "В каком слове пишется одна буква Н?",
-                answers: ["деревя..ый", "стекля..ый", "оловя..ый", "ветре..ый"],
-                correct: 3,
-                explanation: "Ветреный пишется с одной Н (исключение)"
-            },
-            {
-                question: "Укажите предложение с грамматической ошибкой:",
-                answers: [
-                    "Он пришел согласно расписанию.",
-                    "Благодаря дождю, урожай был хорошим.",
-                    "По приезду в город, он сразу пошел в музей.",
-                    "Вопреки ожиданиям, все прошло хорошо."
-                ],
-                correct: 2,
-                explanation: "Правильно: по приезде (предлог ПО требует дательного падежа)"
-            },
-            {
-                question: "В каком слове пишется Ь?",
-                answers: ["плащ..", "мыш..", "ноч..", "ключ.."],
-                correct: 1,
-                explanation: "Мягкий знак пишется после шипящих в существительных женского рода 3-го склонения"
-            },
-            {
-                question: "Выберите правильную форму числительного:",
-                answers: [
-                    "С двадцатью пятью рублями",
-                    "С двадцатью пятью рублями",
-                    "С двадцатью пятью рублями",
-                    "С двадцатью пятью рублями"
-                ],
-                correct: 0,
-                explanation: "Все варианты одинаковые - это правильная форма"
-            },
-            {
-                question: "В каком предложении нужно поставить тире?",
-                answers: [
-                    "Москва столица России.",
-                    "Москва это столица России.",
-                    "Москва была столицей России.",
-                    "Москва стала столицей России."
-                ],
-                correct: 0,
-                explanation: "Тире ставится между подлежащим и сказуемым, выраженными существительными в именительном падеже"
+                id: 5,
+                title: "Уровень 5: Лексика",
+                description: "Словарные слова",
+                questions: [
+                    {
+                        question: "Выберите правильный вариант:",
+                        answers: [
+                            "Одеть пальто",
+                            "Надеть пальто",
+                            "Одеться пальто",
+                            "Надеться пальто"
+                        ],
+                        correct: 1,
+                        explanation: "Правильно: надеть пальто (надеть что-то на себя)"
+                    },
+                    {
+                        question: "Выберите правильный вариант:",
+                        answers: [
+                            "Одеть ребенка",
+                            "Надеть ребенка",
+                            "Одеться ребенка",
+                            "Надеться ребенка"
+                        ],
+                        correct: 0,
+                        explanation: "Правильно: одеть ребенка (одеть кого-то)"
+                    },
+                    {
+                        question: "Выберите правильный вариант:",
+                        answers: [
+                            "Одеться в пальто",
+                            "Надеться в пальто",
+                            "Одеть в пальто",
+                            "Надеть в пальто"
+                        ],
+                        correct: 0,
+                        explanation: "Правильно: одеться в пальто (одеться во что-то)"
+                    }
+                ]
             }
         ];
 
+        // Состояние игры
+        let currentLevel = null;
         let currentQuestion = 0;
         let score = 0;
         let correctAnswers = 0;
@@ -391,28 +655,83 @@
         let fallingWordsInterval = null;
         let questionTimeout = null;
         let consecutiveCorrect = 0;
+        let completedLevels = JSON.parse(localStorage.getItem('completedLevels') || '{}');
 
-        function initGame() {
+        // Инициализация
+        function init() {
+            renderLevelSelect();
+        }
+
+        // Рендеринг экрана выбора уровней
+        function renderLevelSelect() {
+            const levelsList = document.getElementById('levelsList');
+            levelsList.innerHTML = '';
+
+            levels.forEach((level, index) => {
+                const isCompleted = completedLevels[level.id];
+                const isAvailable = index === 0 || completedLevels[levels[index - 1].id];
+
+                const levelItem = document.createElement('div');
+                levelItem.className = 'level-item';
+
+                const levelNode = document.createElement('div');
+                levelNode.className = 'level-node';
+                
+                if (isCompleted) {
+                    levelNode.classList.add('completed');
+                    levelNode.textContent = '✓';
+                } else if (isAvailable) {
+                    levelNode.classList.add('available');
+                    levelNode.textContent = level.id;
+                    levelNode.onclick = () => startLevel(level);
+                } else {
+                    levelNode.classList.add('locked');
+                    levelNode.textContent = '🔒';
+                }
+
+                const levelInfo = document.createElement('div');
+                levelInfo.className = 'level-info';
+                levelInfo.innerHTML = `
+                    <h3>${level.title}</h3>
+                    <p>${level.description}</p>
+                    ${isCompleted ? `<div class="level-stars">⭐ ${completedLevels[level.id].stars || 0}/3</div>` : ''}
+                `;
+
+                levelItem.appendChild(levelNode);
+                levelItem.appendChild(levelInfo);
+                levelsList.appendChild(levelItem);
+            });
+        }
+
+        // Запуск уровня
+        function startLevel(level) {
+            currentLevel = level;
             currentQuestion = 0;
             score = 0;
             correctAnswers = 0;
             totalQuestions = 0;
             consecutiveCorrect = 0;
             gameStartTime = Date.now();
-            document.getElementById('gameOver').classList.remove('show');
+
+            document.getElementById('levelSelectScreen').classList.remove('active');
+            document.getElementById('gameScreen').classList.add('active');
+            document.getElementById('levelTitle').textContent = level.title;
+            document.getElementById('levelComplete').classList.remove('show');
             document.getElementById('questionContainer').classList.remove('hidden');
+
             updateStats();
             showQuestion();
             startFallingWords();
         }
 
+        // Показать вопрос
         function showQuestion() {
-            if (currentQuestion >= questions.length) {
-                endGame();
+            if (!currentLevel || currentQuestion >= currentLevel.questions.length) {
+                completeLevel();
                 return;
             }
 
-            const q = questions[currentQuestion];
+            const q = currentLevel.questions[currentQuestion];
             document.getElementById('questionText').textContent = q.question;
             
             const answersDiv = document.getElementById('answers');
@@ -429,20 +748,20 @@
             totalQuestions++;
             updateStats();
 
-            // Автоматический переход к следующему вопросу через 30 секунд
             if (questionTimeout) clearTimeout(questionTimeout);
             questionTimeout = setTimeout(() => {
-                selectAnswer(-1); // -1 означает неправильный ответ (время вышло)
+                selectAnswer(-1);
             }, 30000);
         }
 
+        // Выбор ответа
         function selectAnswer(selectedIndex) {
             if (questionTimeout) {
                 clearTimeout(questionTimeout);
                 questionTimeout = null;
             }
 
-            const q = questions[currentQuestion];
+            const q = currentLevel.questions[currentQuestion];
             const buttons = document.querySelectorAll('.answer-btn');
             
             buttons.forEach((btn, index) => {
@@ -457,7 +776,7 @@
             if (selectedIndex === q.correct) {
                 correctAnswers++;
                 consecutiveCorrect++;
-                score += 10 + (consecutiveCorrect > 1 ? 5 : 0); // Бонус за серию
+                score += 10 + (consecutiveCorrect > 1 ? 5 : 0);
                 createParticles();
             } else {
                 consecutiveCorrect = 0;
@@ -474,15 +793,19 @@
             }, 2000);
         }
 
+        // Обновление статистики
         function updateStats() {
             document.getElementById('score').textContent = score;
             document.getElementById('correct').textContent = correctAnswers;
             document.getElementById('questionNum').textContent = totalQuestions;
             
-            const progress = (totalQuestions / questions.length) * 100;
-            document.getElementById('progress').style.width = progress + '%';
+            if (currentLevel) {
+                const progress = (totalQuestions / currentLevel.questions.length) * 100;
+                document.getElementById('progress').style.width = progress + '%';
+            }
         }
 
+        // Падающие слова
         function startFallingWords() {
             if (fallingWordsInterval) clearInterval(fallingWordsInterval);
             
@@ -524,7 +847,8 @@
             }
         }
 
-        function endGame() {
+        // Завершение уровня
+        function completeLevel() {
             if (fallingWordsInterval) {
                 clearInterval(fallingWordsInterval);
                 fallingWordsInterval = null;
@@ -538,34 +862,72 @@
             
             const timeSpent = Math.floor((Date.now() - gameStartTime) / 1000);
             const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+            
+            // Вычисление звезд (1-3)
+            let stars = 1;
+            if (accuracy >= 100) stars = 3;
+            else if (accuracy >= 70) stars = 2;
+
+            // Сохранение прогресса
+            if (!completedLevels[currentLevel.id] || completedLevels[currentLevel.id].stars < stars) {
+                completedLevels[currentLevel.id] = {
+                    stars: stars,
+                    score: score,
+                    accuracy: accuracy
+                };
+                localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+            }
 
             document.getElementById('finalScore').textContent = score;
             document.getElementById('finalCorrect').textContent = correctAnswers;
             document.getElementById('finalTotal').textContent = totalQuestions;
             document.getElementById('finalAccuracy').textContent = accuracy;
+            document.getElementById('finalStars').textContent = stars;
 
-            document.getElementById('gameOver').classList.add('show');
+            document.getElementById('levelComplete').classList.add('show');
 
             // Отправка результатов в бота
             if (tg && tg.sendData) {
                 const result = {
+                    level: currentLevel.id,
                     score: score,
                     correct: correctAnswers,
                     total: totalQuestions,
                     timeSpent: timeSpent,
-                    accuracy: accuracy
+                    accuracy: accuracy,
+                    stars: stars
                 };
                 tg.sendData(JSON.stringify(result));
             }
         }
 
-        function restartGame() {
-            initGame();
+        // Возврат к выбору уровней
+        function backToLevelSelect() {
+            if (fallingWordsInterval) {
+                clearInterval(fallingWordsInterval);
+                fallingWordsInterval = null;
+            }
+            if (questionTimeout) {
+                clearTimeout(questionTimeout);
+                questionTimeout = null;
+            }
+
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('levelSelectScreen').classList.add('active');
+            renderLevelSelect();
         }
 
-        // Запуск игры при загрузке
-        initGame();
+        // Повтор уровня
+        function restartLevel() {
+            if (currentLevel) {
+                startLevel(currentLevel);
+            }
+        }
+
+        // Запуск при загрузке
+        init();
     </script>
 </body>
 </html>
+
 
