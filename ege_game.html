@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ЕГЭ Аркада - Русский язык</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            font-size: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .game-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .question-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px 20px 0 0;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .question-container.hidden {
+            transform: translateY(100%);
+        }
+
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .answer-btn {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .answer-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .answer-btn.correct {
+            background: #4caf50;
+            border-color: #4caf50;
+        }
+
+        .answer-btn.wrong {
+            background: #f44336;
+            border-color: #f44336;
+        }
+
+        .answer-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .falling-word {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fall linear;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            from {
+                top: -50px;
+                opacity: 1;
+            }
+            to {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particle-float 2s ease-out forwards;
+        }
+
+        @keyframes particle-float {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0);
+            }
+        }
+
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .game-over.show {
+            display: flex;
+        }
+
+        .game-over h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .final-stats {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .final-stats p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .restart-btn {
+            padding: 15px 30px;
+            background: #4caf50;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 10px 0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4caf50;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🎮 ЕГЭ Аркада</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span>Очки</span>
+                    <span class="stat-value" id="score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Правильно</span>
+                    <span class="stat-value" id="correct">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Вопрос</span>
+                    <span class="stat-value" id="questionNum">0</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+        </div>
+
+        <div class="game-area" id="gameArea"></div>
+
+        <div class="question-container" id="questionContainer">
+            <div class="question-text" id="questionText"></div>
+            <div class="answers" id="answers"></div>
+        </div>
+
+        <div class="game-over" id="gameOver">
+            <h2>🎉 Игра завершена!</h2>
+            <div class="final-stats">
+                <p>🏆 Очки: <span id="finalScore">0</span></p>
+                <p>✅ Правильных: <span id="finalCorrect">0</span>/<span id="finalTotal">0</span></p>
+                <p>📈 Точность: <span id="finalAccuracy">0</span>%</p>
+            </div>
+            <button class="restart-btn" onclick="restartGame()">Играть снова</button>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        // Вопросы для ЕГЭ по русскому языку
+        const questions = [
+            {
+                question: "В каком слове пропущена буква Е?",
+                answers: ["пр..брежный", "пр..одолеть", "пр..образовать", "пр..следовать"],
+                correct: 0,
+                explanation: "Правильно: прибрежный (приставка ПРИ- означает 'близость')"
+            },
+            {
+                question: "В каком предложении НЕ со словом пишется раздельно?",
+                answers: [
+                    "Это (не)известный писатель.",
+                    "Он (не)высокий, а низкий.",
+                    "Задача (не)решена.",
+                    "Он (не)приятный человек."
+                ],
+                correct: 1,
+                explanation: "НЕ пишется раздельно, если есть противопоставление с союзом 'а'"
+            },
+            {
+                question: "Укажите предложение с пунктуационной ошибкой:",
+                answers: [
+                    "Солнце, которое светило ярко, согревало землю.",
+                    "Он пришел, но она уже ушла.",
+                    "В лесу, где мы гуляли, было тихо.",
+                    "Я не знаю, что делать."
+                ],
+                correct: 0,
+                explanation: "В первом предложении запятая перед 'которое' не нужна, так как это определяемое слово"
+            },
+            {
+                question: "В каком слове ударение падает на первый слог?",
+                answers: ["звонИт", "квартАл", "дОговор", "средствА"],
+                correct: 2,
+                explanation: "Правильно: дОговор (ударение на первый слог)"
+            },
+            {
+                question: "Выберите правильный вариант:",
+                answers: [
+                    "Одеть пальто",
+                    "Надеть пальто",
+                    "Одеться пальто",
+                    "Надеться пальто"
+                ],
+                correct: 1,
+                explanation: "Правильно: надеть пальто (надеть что-то на себя)"
+            },
+            {
+                question: "В каком слове пишется одна буква Н?",
+                answers: ["деревя..ый", "стекля..ый", "оловя..ый", "ветре..ый"],
+                correct: 3,
+                explanation: "Ветреный пишется с одной Н (исключение)"
+            },
+            {
+                question: "Укажите предложение с грамматической ошибкой:",
+                answers: [
+                    "Он пришел согласно расписанию.",
+                    "Благодаря дождю, урожай был хорошим.",
+                    "По приезду в город, он сразу пошел в музей.",
+                    "Вопреки ожиданиям, все прошло хорошо."
+                ],
+                correct: 2,
+                explanation: "Правильно: по приезде (предлог ПО требует дательного падежа)"
+            },
+            {
+                question: "В каком слове пишется Ь?",
+                answers: ["плащ..", "мыш..", "ноч..", "ключ.."],
+                correct: 1,
+                explanation: "Мягкий знак пишется после шипящих в существительных женского рода 3-го склонения"
+            },
+            {
+                question: "Выберите правильную форму числительного:",
+                answers: [
+                    "С двадцатью пятью рублями",
+                    "С двадцатью пятью рублями",
+                    "С двадцатью пятью рублями",
+                    "С двадцатью пятью рублями"
+                ],
+                correct: 0,
+                explanation: "Все варианты одинаковые - это правильная форма"
+            },
+            {
+                question: "В каком предложении нужно поставить тире?",
+                answers: [
+                    "Москва столица России.",
+                    "Москва это столица России.",
+                    "Москва была столицей России.",
+                    "Москва стала столицей России."
+                ],
+                correct: 0,
+                explanation: "Тире ставится между подлежащим и сказуемым, выраженными существительными в именительном падеже"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let correctAnswers = 0;
+        let totalQuestions = 0;
+        let gameStartTime = Date.now();
+        let fallingWordsInterval = null;
+        let questionTimeout = null;
+        let consecutiveCorrect = 0;
+
+        function initGame() {
+            currentQuestion = 0;
+            score = 0;
+            correctAnswers = 0;
+            totalQuestions = 0;
+            consecutiveCorrect = 0;
+            gameStartTime = Date.now();
+            document.getElementById('gameOver').classList.remove('show');
+            document.getElementById('questionContainer').classList.remove('hidden');
+            updateStats();
+            showQuestion();
+            startFallingWords();
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= questions.length) {
+                endGame();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            document.getElementById('questionText').textContent = q.question;
+            
+            const answersDiv = document.getElementById('answers');
+            answersDiv.innerHTML = '';
+
+            q.answers.forEach((answer, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.textContent = answer;
+                btn.onclick = () => selectAnswer(index);
+                answersDiv.appendChild(btn);
+            });
+
+            totalQuestions++;
+            updateStats();
+
+            // Автоматический переход к следующему вопросу через 30 секунд
+            if (questionTimeout) clearTimeout(questionTimeout);
+            questionTimeout = setTimeout(() => {
+                selectAnswer(-1); // -1 означает неправильный ответ (время вышло)
+            }, 30000);
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (questionTimeout) {
+                clearTimeout(questionTimeout);
+                questionTimeout = null;
+            }
+
+            const q = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.answer-btn');
+            
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === q.correct) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex && index !== q.correct) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            if (selectedIndex === q.correct) {
+                correctAnswers++;
+                consecutiveCorrect++;
+                score += 10 + (consecutiveCorrect > 1 ? 5 : 0); // Бонус за серию
+                createParticles();
+            } else {
+                consecutiveCorrect = 0;
+                if (selectedIndex !== -1) {
+                    score = Math.max(0, score - 5);
+                }
+            }
+
+            updateStats();
+
+            setTimeout(() => {
+                currentQuestion++;
+                showQuestion();
+            }, 2000);
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('correct').textContent = correctAnswers;
+            document.getElementById('questionNum').textContent = totalQuestions;
+            
+            const progress = (totalQuestions / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function startFallingWords() {
+            if (fallingWordsInterval) clearInterval(fallingWordsInterval);
+            
+            const words = ['ЕГЭ', 'Русский', 'Язык', 'Грамматика', 'Орфография', 'Пунктуация'];
+            
+            fallingWordsInterval = setInterval(() => {
+                const word = words[Math.floor(Math.random() * words.length)];
+                createFallingWord(word);
+            }, 2000);
+        }
+
+        function createFallingWord(word) {
+            const gameArea = document.getElementById('gameArea');
+            const wordEl = document.createElement('div');
+            wordEl.className = 'falling-word';
+            wordEl.textContent = word;
+            wordEl.style.left = Math.random() * (gameArea.offsetWidth - 100) + 'px';
+            wordEl.style.animationDuration = (3 + Math.random() * 2) + 's';
+            gameArea.appendChild(wordEl);
+
+            setTimeout(() => {
+                wordEl.remove();
+            }, 5000);
+        }
+
+        function createParticles() {
+            const gameArea = document.getElementById('gameArea');
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * gameArea.offsetWidth + 'px';
+                particle.style.top = (gameArea.offsetHeight - 200) + 'px';
+                particle.style.animationDelay = (Math.random() * 0.5) + 's';
+                gameArea.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                }, 2000);
+            }
+        }
+
+        function endGame() {
+            if (fallingWordsInterval) {
+                clearInterval(fallingWordsInterval);
+                fallingWordsInterval = null;
+            }
+            if (questionTimeout) {
+                clearTimeout(questionTimeout);
+                questionTimeout = null;
+            }
+
+            document.getElementById('questionContainer').classList.add('hidden');
+            
+            const timeSpent = Math.floor((Date.now() - gameStartTime) / 1000);
+            const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalCorrect').textContent = correctAnswers;
+            document.getElementById('finalTotal').textContent = totalQuestions;
+            document.getElementById('finalAccuracy').textContent = accuracy;
+
+            document.getElementById('gameOver').classList.add('show');
+
+            // Отправка результатов в бота
+            if (tg && tg.sendData) {
+                const result = {
+                    score: score,
+                    correct: correctAnswers,
+                    total: totalQuestions,
+                    timeSpent: timeSpent,
+                    accuracy: accuracy
+                };
+                tg.sendData(JSON.stringify(result));
+            }
+        }
+
+        function restartGame() {
+            initGame();
+        }
+
+        // Запуск игры при загрузке
+        initGame();
+    </script>
+</body>
+</html>
+
