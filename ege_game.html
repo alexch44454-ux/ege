@@ -58,6 +58,20 @@
             position: relative;
         }
 
+        .level-select-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(72, 187, 120, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(72, 187, 120, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .level-select-screen::-webkit-scrollbar {
             width: 8px;
         }
@@ -98,6 +112,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            z-index: 1;
         }
 
         .start-label {
@@ -119,12 +134,88 @@
             left: 50%;
             top: 0;
             bottom: 0;
+            width: 60px;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .path-line::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            background: linear-gradient(180deg, #8b7355 0%, #6b5d4f 50%, #4a3d2e 100%);
+            transform: translateX(-50%);
+            border-radius: 6px;
+            box-shadow: 
+                inset 0 0 10px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .path-line::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
             width: 8px;
-            background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+            background: repeating-linear-gradient(
+                90deg,
+                #a0826d 0px,
+                #a0826d 2px,
+                #8b7355 2px,
+                #8b7355 4px
+            );
             transform: translateX(-50%);
             border-radius: 4px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            z-index: 1;
+            opacity: 0.6;
+        }
+
+        /* Камни на тропинке */
+        .path-stone {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #5a4a3a 0%, #3d2f20 100%);
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+
+        .path-stone::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 5px;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        /* Декоративные элементы по бокам тропинки */
+        .path-decoration {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .path-decoration.grass-left {
+            left: calc(50% - 50px);
+            font-size: 20px;
+        }
+
+        .path-decoration.grass-right {
+            left: calc(50% + 50px);
+            font-size: 20px;
         }
 
         .levels-list {
@@ -249,31 +340,70 @@
 
         .player-character {
             position: absolute;
-            right: 20px;
-            width: 60px;
-            height: 60px;
+            left: 50%;
+            width: 50px;
+            height: 50px;
             background: linear-gradient(135deg, #48bb78, #38a169);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            z-index: 5;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            animation: float 3s ease-in-out infinite;
+            font-size: 28px;
+            z-index: 6;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(72, 187, 120, 0.5);
+            transform: translateX(-50%);
+            transition: bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            border: 3px solid #2f855a;
+        }
+
+        .player-character::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: shine 2s ease-in-out infinite;
         }
 
         .player-character:hover {
-            transform: scale(1.1);
+            transform: translateX(-50%) scale(1.15);
         }
 
         @keyframes float {
             0%, 100% {
-                transform: translateY(0);
+                transform: translateX(-50%) translateY(0);
             }
             50% {
-                transform: translateY(-10px);
+                transform: translateX(-50%) translateY(-8px);
+            }
+        }
+
+        @keyframes shine {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .player-character.walking {
+            animation: walk 0.6s ease-in-out infinite;
+        }
+
+        @keyframes walk {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(-50%) translateY(-3px) rotate(-5deg);
+            }
+            75% {
+                transform: translateX(-50%) translateY(-3px) rotate(5deg);
             }
         }
 
@@ -1035,7 +1165,22 @@
         // Рендеринг экрана выбора уровней
         function renderLevelSelect() {
             const levelsList = document.getElementById('levelsList');
+            const pathContainer = document.querySelector('.path-container');
             levelsList.innerHTML = '';
+
+            // Удаляем старые камни и персонажа
+            const oldStones = pathContainer.querySelectorAll('.path-stone');
+            oldStones.forEach(stone => stone.remove());
+            const oldPlayer = pathContainer.querySelector('.player-character');
+            if (oldPlayer) oldPlayer.remove();
+
+            // Находим последний пройденный уровень
+            let lastCompletedLevel = 0;
+            for (let i = 0; i < levels.length; i++) {
+                if (completedLevels[levels[i].id]) {
+                    lastCompletedLevel = i;
+                }
+            }
 
             // Отображаем уровни в обычном порядке (column-reverse покажет их снизу вверх)
             levels.forEach((level, index) => {
@@ -1046,6 +1191,7 @@
 
                 const levelItem = document.createElement('div');
                 levelItem.className = 'level-item';
+                levelItem.dataset.levelIndex = index;
 
                 const levelNode = document.createElement('div');
                 levelNode.className = 'level-node';
@@ -1075,18 +1221,124 @@
                 levelsList.appendChild(levelItem);
             });
 
-            // Добавляем персонажа
+            // Добавляем камни на тропинку между уровнями
+            const levelItems = levelsList.querySelectorAll('.level-item');
+            levelItems.forEach((item, index) => {
+                if (index < levelItems.length - 1) {
+                    // Добавляем 2-3 камня между уровнями
+                    const stonesCount = 2 + Math.floor(Math.random() * 2);
+                    for (let i = 0; i < stonesCount; i++) {
+                        const stone = document.createElement('div');
+                        stone.className = 'path-stone';
+                        // Позиционируем камни между текущим и следующим уровнем
+                        const randomOffset = (Math.random() - 0.5) * 15;
+                        stone.style.left = `calc(50% + ${randomOffset}px)`;
+                        stone.style.top = `${30 + i * 15}px`;
+                        pathContainer.appendChild(stone);
+                    }
+
+                    // Добавляем декоративную траву по бокам
+                    if (Math.random() > 0.5) {
+                        const grassLeft = document.createElement('div');
+                        grassLeft.className = 'path-decoration grass-left';
+                        grassLeft.textContent = '🌿';
+                        grassLeft.style.top = `${20 + Math.random() * 20}px`;
+                        pathContainer.appendChild(grassLeft);
+
+                        const grassRight = document.createElement('div');
+                        grassRight.className = 'path-decoration grass-right';
+                        grassRight.textContent = '🌿';
+                        grassRight.style.top = `${20 + Math.random() * 20}px`;
+                        pathContainer.appendChild(grassRight);
+                    }
+                }
+            });
+
+            // Добавляем персонажа на тропинку
             const playerChar = document.createElement('div');
             playerChar.className = 'player-character';
             playerChar.textContent = '🦉';
             playerChar.title = 'Ваш прогресс';
-            document.querySelector('.path-container').appendChild(playerChar);
+            pathContainer.appendChild(playerChar);
 
-            // Прокручиваем вниз (к первому уровню) при загрузке
+            // Позиционируем персонажа на уровне последнего пройденного уровня
             setTimeout(() => {
+                positionPlayerOnPath(lastCompletedLevel);
+                
+                // Прокручиваем к персонажу
                 const levelSelectScreen = document.getElementById('levelSelectScreen');
-                levelSelectScreen.scrollTop = levelSelectScreen.scrollHeight;
-            }, 100);
+                if (lastCompletedLevel >= 0 && lastCompletedLevel < levelItems.length) {
+                    // Учитываем обратный порядок отображения
+                    const visualIndex = levelItems.length - 1 - lastCompletedLevel;
+                    const targetLevel = levelItems[visualIndex];
+                    if (targetLevel) {
+                        // Ждем, пока элементы отрендерятся
+                        requestAnimationFrame(() => {
+                            const targetPosition = targetLevel.offsetTop - levelSelectScreen.clientHeight / 2 + targetLevel.offsetHeight / 2;
+                            levelSelectScreen.scrollTo({
+                                top: Math.max(0, targetPosition),
+                                behavior: 'smooth'
+                            });
+                        });
+                    }
+                } else {
+                    // Если нет пройденных уровней, прокручиваем вниз
+                    setTimeout(() => {
+                        levelSelectScreen.scrollTop = levelSelectScreen.scrollHeight;
+                    }, 50);
+                }
+            }, 150);
+        }
+
+        // Позиционирование персонажа на тропинке
+        function positionPlayerOnPath(levelIndex) {
+            const playerChar = document.querySelector('.player-character');
+            const levelsList = document.getElementById('levelsList');
+            const levelItems = levelsList.querySelectorAll('.level-item');
+            
+            if (!playerChar || levelItems.length === 0) return;
+
+            // Если нет пройденных уровней, ставим персонажа внизу (начало тропинки)
+            if (levelIndex < 0) {
+                playerChar.style.top = 'auto';
+                playerChar.style.bottom = '20px';
+                playerChar.style.animation = 'float 3s ease-in-out infinite';
+                playerChar.classList.remove('walking');
+                return;
+            }
+
+            // Учитываем, что уровни отображаются в обратном порядке (column-reverse)
+            // Поэтому последний уровень в массиве - это первый визуально (внизу)
+            const visualIndex = levelItems.length - 1 - levelIndex;
+            const targetLevel = levelItems[visualIndex];
+            
+            if (!targetLevel) {
+                playerChar.style.top = 'auto';
+                playerChar.style.bottom = '20px';
+                playerChar.style.animation = 'float 3s ease-in-out infinite';
+                playerChar.classList.remove('walking');
+                return;
+            }
+
+            // Используем offsetTop для позиционирования относительно levelsList
+            const levelsListRect = levelsList.getBoundingClientRect();
+            const levelRect = targetLevel.getBoundingClientRect();
+            
+            // Вычисляем позицию центра уровня относительно levelsList
+            const levelCenter = levelRect.top - levelsListRect.top + levelRect.height / 2;
+            
+            // Позиционируем персонажа на уровне центра выбранного уровня
+            // Добавляем отступ от верха levelsList
+            const pathContainer = document.querySelector('.path-container');
+            const pathContainerPadding = 40; // padding-top path-container
+            const topPosition = pathContainerPadding + levelCenter;
+            
+            playerChar.style.top = `${topPosition}px`;
+            playerChar.style.bottom = 'auto';
+            playerChar.style.animation = 'walk 0.6s ease-in-out infinite';
+            
+            // Добавляем класс для анимации ходьбы
+            playerChar.classList.add('walking');
         }
 
         // Запуск уровня
@@ -1255,7 +1507,8 @@
             else if (accuracy >= 70) stars = 2;
 
             // Сохранение прогресса
-            if (!completedLevels[currentLevel.id] || completedLevels[currentLevel.id].stars < stars) {
+            const wasCompleted = completedLevels[currentLevel.id];
+            if (!wasCompleted || completedLevels[currentLevel.id].stars < stars) {
                 completedLevels[currentLevel.id] = {
                     stars: stars,
                     score: score,
@@ -1493,5 +1746,4 @@
     </script>
 </body>
 </html>
-
 
