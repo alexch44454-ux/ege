@@ -786,6 +786,129 @@
                 transform: scale(1);
             }
         }
+
+        /* Экран объяснения */
+        .explanation-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .explanation-content {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .explanation-content h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .explanation-content h3 {
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .explanation-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+        }
+
+        .explanation-content ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .explanation-content li {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+        }
+
+        .explanation-content .example {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #48bb78;
+        }
+
+        .explanation-content .example-title {
+            font-weight: bold;
+            color: #48bb78;
+            margin-bottom: 10px;
+        }
+
+        .explanation-content .exception {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .explanation-content .exception-title {
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+
+        .explanation-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .explanation-word {
+            background: rgba(72, 187, 120, 0.3);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            border: 2px solid rgba(72, 187, 120, 0.5);
+        }
+
+        .explanation-word .accent {
+            color: #ffd700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .start-practice-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-practice-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -821,6 +944,12 @@
                 <div class="levels-list" id="levelsList"></div>
                 <div class="start-label">НАЧАТЬ</div>
             </div>
+        </div>
+
+        <!-- Экран объяснения -->
+        <div class="screen explanation-screen" id="explanationScreen">
+            <button class="back-btn" onclick="backToLevelSelect()">← Назад</button>
+            <div class="explanation-content" id="explanationContent"></div>
         </div>
 
         <!-- Экран игры -->
@@ -920,26 +1049,147 @@
         const levels = [
             {
                 id: 1,
-                title: "Уровень 1: Орфография",
-                description: "Правописание приставок",
+                title: "Блок 1: Ударение",
+                description: "Ударение в глаголах прошедшего времени женского рода",
+                explanation: {
+                    title: "Ударение в глаголах прошедшего времени женского рода",
+                    content: `
+                        <h3>📚 Основное правило</h3>
+                        <p>В глаголах прошедшего времени женского рода ударение, как правило, падает на окончание <strong>А</strong>.</p>
+                        
+                        <div class="example">
+                            <div class="example-title">✅ Примеры:</div>
+                            <div class="explanation-words">
+                                <span class="explanation-word">брал<span class="accent">А</span></span>
+                                <span class="explanation-word">брал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">взял<span class="accent">А</span></span>
+                                <span class="explanation-word">взял<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">влил<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">ворвал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">воспринял<span class="accent">А</span></span>
+                                <span class="explanation-word">воссоздал<span class="accent">А</span></span>
+                                <span class="explanation-word">гнал<span class="accent">А</span></span>
+                                <span class="explanation-word">гнал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">добрал<span class="accent">А</span></span>
+                                <span class="explanation-word">добрал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">дождал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">ждал<span class="accent">А</span></span>
+                                <span class="explanation-word">занял<span class="accent">А</span></span>
+                                <span class="explanation-word">заперл<span class="accent">А</span></span>
+                                <span class="explanation-word">заперл<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">звал<span class="accent">А</span></span>
+                                <span class="explanation-word">лгал<span class="accent">А</span></span>
+                                <span class="explanation-word">лил<span class="accent">А</span></span>
+                                <span class="explanation-word">лил<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">наврал<span class="accent">А</span></span>
+                                <span class="explanation-word">надорвал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">назвал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">налил<span class="accent">А</span></span>
+                                <span class="explanation-word">нарвал<span class="accent">А</span></span>
+                                <span class="explanation-word">начал<span class="accent">А</span></span>
+                                <span class="explanation-word">облил<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">обнял<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">обогнал<span class="accent">А</span></span>
+                                <span class="explanation-word">ободрал<span class="accent">А</span></span>
+                                <span class="explanation-word">отбыл<span class="accent">А</span></span>
+                                <span class="explanation-word">отдал<span class="accent">А</span></span>
+                                <span class="explanation-word">отозвал<span class="accent">А</span></span>
+                                <span class="explanation-word">отозвал<span class="accent">А</span>сь</span>
+                                <span class="explanation-word">перелил<span class="accent">А</span></span>
+                                <span class="explanation-word">позвал<span class="accent">А</span></span>
+                                <span class="explanation-word">полил<span class="accent">А</span></span>
+                                <span class="explanation-word">понял<span class="accent">А</span></span>
+                                <span class="explanation-word">прибыл<span class="accent">А</span></span>
+                                <span class="explanation-word">рвал<span class="accent">А</span></span>
+                                <span class="explanation-word">снял<span class="accent">А</span></span>
+                                <span class="explanation-word">создал<span class="accent">А</span></span>
+                                <span class="explanation-word">сорвал<span class="accent">А</span></span>
+                                <span class="explanation-word">убрал<span class="accent">А</span></span>
+                            </div>
+                        </div>
+
+                        <div class="exception">
+                            <div class="exception-title">⚠️ Исключение 1: Приставка ВЫ-</div>
+                            <p>Исключение составляют глаголы прошедшего времени женского рода с приставкой <strong>ВЫ-</strong>, которая перетягивает ударение на себя:</p>
+                            <div class="explanation-words">
+                                <span class="explanation-word"><span class="accent">в</span>Ылила</span>
+                                <span class="explanation-word"><span class="accent">в</span>Ызвала</span>
+                            </div>
+                        </div>
+
+                        <div class="exception">
+                            <div class="exception-title">⚠️ Исключение 2: Особые глаголы</div>
+                            <p>У глаголов <strong>класть, красться, слать, послать, отослать</strong> ударение в форме женского рода прошедшего времени <strong>НЕ</strong> падает на окончание А, а остаётся на основе:</p>
+                            <div class="explanation-words">
+                                <span class="explanation-word"><span class="accent">кл</span>Ала</span>
+                                <span class="explanation-word"><span class="accent">кр</span>Алась</span>
+                                <span class="explanation-word"><span class="accent">сл</span>Ала</span>
+                                <span class="explanation-word">пос<span class="accent">л</span>Ала</span>
+                                <span class="explanation-word">отос<span class="accent">л</span>Ала</span>
+                            </div>
+                        </div>
+                    `
+                },
                 questions: [
                     {
-                        question: "В каком слове пропущена буква Е?",
-                        answers: ["пр..брежный", "пр..одолеть", "пр..образовать", "пр..следовать"],
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["брАла", "брАлА", "бралА", "брАлАсь"],
+                        correct: 2,
+                        explanation: "Правильно: бралА - ударение падает на окончание А"
+                    },
+                    {
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["взЯла", "взЯлА", "взялА", "взЯлАсь"],
+                        correct: 2,
+                        explanation: "Правильно: взялА - ударение падает на окончание А"
+                    },
+                    {
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["понЯла", "понЯлА", "понялА", "понЯлАсь"],
+                        correct: 2,
+                        explanation: "Правильно: понялА - ударение падает на окончание А"
+                    },
+                    {
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["создАла", "создАлА", "создалА", "создАлАсь"],
+                        correct: 2,
+                        explanation: "Правильно: создалА - ударение падает на окончание А"
+                    },
+                    {
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["звАла", "звАлА", "звалА", "звАлАсь"],
+                        correct: 2,
+                        explanation: "Правильно: звалА - ударение падает на окончание А"
+                    },
+                    {
+                        question: "В каком слове ударение НЕ падает на окончание А (исключение с приставкой ВЫ-)?",
+                        answers: ["вЫлила", "вылИла", "вылилА", "вЫлилА"],
                         correct: 0,
-                        explanation: "Правильно: прибрежный (приставка ПРИ- означает 'близость')"
+                        explanation: "Правильно: вЫлила - приставка ВЫ- перетягивает ударение на себя"
                     },
                     {
-                        question: "В каком слове пишется И?",
-                        answers: ["пр..бывать в городе", "пр..бывать в неведении", "пр..дать друга", "пр..дать форму"],
-                        correct: 1,
-                        explanation: "Пребывать в неведении - приставка ПРЕ- (значение 'очень')"
+                        question: "В каком слове ударение НЕ падает на окончание А (исключение с приставкой ВЫ-)?",
+                        answers: ["вЫзвала", "вызвАла", "вызвалА", "вЫзвалА"],
+                        correct: 0,
+                        explanation: "Правильно: вЫзвала - приставка ВЫ- перетягивает ударение на себя"
                     },
                     {
-                        question: "В каком слове пишется одна буква Н?",
-                        answers: ["деревя..ый", "стекля..ый", "оловя..ый", "ветре..ый"],
-                        correct: 3,
-                        explanation: "Ветреный пишется с одной Н (исключение)"
+                        question: "В каком слове ударение НЕ падает на окончание А (особый глагол)?",
+                        answers: ["клАла", "клАлА", "клалА", "клАлАсь"],
+                        correct: 0,
+                        explanation: "Правильно: клАла - у глагола 'класть' ударение остаётся на основе"
+                    },
+                    {
+                        question: "В каком слове ударение НЕ падает на окончание А (особый глагол)?",
+                        answers: ["слАла", "слАлА", "слалА", "слАлАсь"],
+                        correct: 0,
+                        explanation: "Правильно: слАла - у глагола 'слать' ударение остаётся на основе"
+                    },
+                    {
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["прибЫла", "прибЫлА", "прибылА", "прибЫлАсь"],
+                        correct: 2,
+                        explanation: "Правильно: прибылА - ударение падает на окончание А"
                     }
                 ]
             },
@@ -1397,9 +1647,36 @@
             consecutiveCorrect = 0;
             gameStartTime = Date.now();
 
+            // Если есть объяснение, показываем его сначала
+            if (level.explanation) {
+                showExplanation(level);
+            } else {
+                // Если объяснения нет, сразу начинаем практику
+                startPractice();
+            }
+        }
+
+        // Показать объяснение
+        function showExplanation(level) {
             document.getElementById('levelSelectScreen').classList.remove('active');
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('explanationScreen').classList.add('active');
+
+            const explanationContent = document.getElementById('explanationContent');
+            explanationContent.innerHTML = `
+                <h2>${level.explanation.title}</h2>
+                ${level.explanation.content}
+                <button class="start-practice-btn" onclick="startPractice()">
+                    🎯 Начать практику
+                </button>
+            `;
+        }
+
+        // Начать практику (после объяснения)
+        function startPractice() {
+            document.getElementById('explanationScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.add('active');
-            document.getElementById('levelTitle').textContent = level.title;
+            document.getElementById('levelTitle').textContent = currentLevel.title;
             document.getElementById('levelComplete').classList.remove('show');
             document.getElementById('questionContainer').classList.remove('hidden');
 
@@ -1601,6 +1878,7 @@
                 questionTimeout = null;
             }
 
+            document.getElementById('explanationScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.remove('active');
             document.getElementById('levelSelectScreen').classList.add('active');
             renderLevelSelect();
@@ -1796,6 +2074,7 @@
     </script>
 </body>
 </html>
+
 
 
 
