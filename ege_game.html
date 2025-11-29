@@ -279,6 +279,13 @@
         .level-node.completed {
             background: linear-gradient(135deg, #f6e05e, #ecc94b);
             border-color: #d69e2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .level-node.completed:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(246, 224, 94, 0.8);
         }
 
         .level-node.available::before {
@@ -1481,9 +1488,6 @@
             // Отображаем уровни в обычном порядке (column-reverse покажет их снизу вверх)
             levels.forEach((level, index) => {
                 const isCompleted = completedLevels[level.id];
-                // Уровень доступен, если это первый уровень или предыдущий пройден
-                const prevLevel = index > 0 ? levels[index - 1] : null;
-                const isAvailable = index === 0 || (prevLevel && completedLevels[prevLevel.id]);
 
                 const levelItem = document.createElement('div');
                 levelItem.className = 'level-item';
@@ -1492,16 +1496,19 @@
                 const levelNode = document.createElement('div');
                 levelNode.className = 'level-node';
                 
+                // Все уровни доступны для прохождения (включая повторное)
                 if (isCompleted) {
+                    // Пройденный уровень - показываем звезду, но можно проходить снова
                     levelNode.classList.add('completed');
                     levelNode.textContent = '⭐';
-                } else if (isAvailable) {
+                    levelNode.onclick = () => startLevel(level);
+                    levelNode.title = 'Пройден. Нажмите, чтобы пройти снова';
+                } else {
+                    // Непройденный уровень - показываем номер
                     levelNode.classList.add('available');
                     levelNode.textContent = level.id;
                     levelNode.onclick = () => startLevel(level);
-                } else {
-                    levelNode.classList.add('locked');
-                    levelNode.textContent = '🔒';
+                    levelNode.title = 'Нажмите, чтобы начать';
                 }
 
                 const levelInfo = document.createElement('div');
@@ -1509,7 +1516,7 @@
                 levelInfo.innerHTML = `
                     <h3>${level.title}</h3>
                     <p>${level.description}</p>
-                    ${isCompleted ? `<div class="level-stars">⭐ ${completedLevels[level.id].stars || 0}/3</div>` : ''}
+                    ${isCompleted ? `<div class="level-stars">⭐ ${completedLevels[level.id].stars || 0}/3</div><div style="font-size: 12px; opacity: 0.7; margin-top: 5px;">Можно пройти снова</div>` : ''}
                 `;
 
                 levelItem.appendChild(levelNode);
@@ -2074,6 +2081,7 @@
     </script>
 </body>
 </html>
+
 
 
 
