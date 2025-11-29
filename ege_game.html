@@ -1111,6 +1111,52 @@
         // Инициализация
         function init() {
             loadTask9Words();
+            loadProgressFromServer();
+        }
+
+        // Загрузка прогресса с сервера
+        function loadProgressFromServer() {
+            // Пытаемся загрузить прогресс из URL параметров (если бот передал через start_param)
+            const urlParams = new URLSearchParams(window.location.search);
+            const progressParam = urlParams.get('progress');
+            if (progressParam) {
+                try {
+                    const serverProgress = JSON.parse(decodeURIComponent(progressParam));
+                    // Объединяем прогресс с сервера с локальным (приоритет у серверного)
+                    Object.keys(serverProgress).forEach(levelId => {
+                        const serverLevel = serverProgress[levelId];
+                        const localLevel = completedLevels[levelId];
+                        // Используем лучший результат (больше звезд)
+                        if (!localLevel || serverLevel.stars > localLevel.stars) {
+                            completedLevels[levelId] = serverLevel;
+                        }
+                    });
+                    localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+                    console.log('Прогресс загружен из URL параметров');
+                } catch (e) {
+                    console.error('Ошибка загрузки прогресса из URL:', e);
+                }
+            }
+            
+            // Отправляем запрос на синхронизацию прогресса с сервером
+            if (tg && tg.sendData) {
+                const syncRequest = {
+                    action: 'sync_progress',
+                    completedLevels: completedLevels
+                };
+                tg.sendData(JSON.stringify(syncRequest));
+            }
+        }
+
+        // Синхронизация прогресса с сервером
+        function syncProgressToServer() {
+            if (tg && tg.sendData) {
+                const syncData = {
+                    action: 'save_progress',
+                    completedLevels: completedLevels
+                };
+                tg.sendData(JSON.stringify(syncData));
+            }
         }
 
         // Загрузка слов для задания 9
@@ -1534,10 +1580,14 @@
                     total: totalQuestions,
                     timeSpent: timeSpent,
                     accuracy: accuracy,
-                    stars: stars
+                    stars: stars,
+                    completedLevels: completedLevels  // Отправляем весь прогресс
                 };
                 tg.sendData(JSON.stringify(result));
             }
+            
+            // Синхронизируем прогресс с сервером
+            syncProgressToServer();
         }
 
         // Возврат к выбору уровней
@@ -1746,4 +1796,6 @@
     </script>
 </body>
 </html>
+
+
 
