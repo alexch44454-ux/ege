@@ -34,6 +34,84 @@
             overflow: hidden;
         }
 
+        /* Верхняя панель навигации */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+            min-width: 0;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(72, 187, 120, 0.3);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: #48bb78;
+            border-radius: 2px;
+        }
+
+        .nav-item-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item-text {
+            font-size: 10px;
+            color: #e2e8f0;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .nav-item.active .nav-item-text {
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        /* Отступ для контента под панелью */
+        .screen.with-navbar {
+            padding-top: 60px;
+        }
+
         /* Экраны */
         .screen {
             position: absolute;
@@ -916,10 +994,107 @@
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
+
+        /* Экран настроек */
+        .settings-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .settings-content {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .settings-content h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .settings-section h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .settings-stats {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .settings-btn {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .settings-btn:last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
+        <!-- Верхняя панель навигации -->
+        <div class="top-navbar" id="topNavbar" style="display: none;">
+            <div class="nav-item active" onclick="switchCategory('arcade')" data-category="arcade">
+                <div class="nav-item-icon">🎯</div>
+                <div class="nav-item-text">Аркада</div>
+            </div>
+            <div class="nav-item" onclick="switchCategory('orthography')" data-category="orthography">
+                <div class="nav-item-icon">📝</div>
+                <div class="nav-item-text">Орфография</div>
+            </div>
+            <div class="nav-item" onclick="switchCategory('punctuation')" data-category="punctuation">
+                <div class="nav-item-icon">✏️</div>
+                <div class="nav-item-text">Пунктуация</div>
+            </div>
+            <div class="nav-item" onclick="switchCategory('grammar')" data-category="grammar">
+                <div class="nav-item-icon">📚</div>
+                <div class="nav-item-text">Грамматика</div>
+            </div>
+            <div class="nav-item" onclick="switchCategory('settings')" data-category="settings">
+                <div class="nav-item-icon">⚙️</div>
+                <div class="nav-item-text">Настройки</div>
+            </div>
+        </div>
+
         <!-- Экран выбора режима -->
         <div class="screen mode-select-screen active" id="modeSelectScreen">
             <div class="mode-select-header">
@@ -1003,6 +1178,36 @@
             </div>
         </div>
 
+        <!-- Экран настроек -->
+        <div class="screen settings-screen" id="settingsScreen">
+            <div class="settings-content">
+                <h2>⚙️ Настройки</h2>
+                
+                <div class="settings-section">
+                    <h3>📊 Статистика</h3>
+                    <div id="settingsStats" class="settings-stats"></div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>🎯 Действия</h3>
+                    <button class="settings-btn" onclick="clearProgress()">
+                        🗑️ Очистить прогресс
+                    </button>
+                    <button class="settings-btn" onclick="exportProgress()">
+                        💾 Экспорт прогресса
+                    </button>
+                </div>
+
+                <div class="settings-section">
+                    <h3>ℹ️ О приложении</h3>
+                    <p style="color: #e2e8f0; font-size: 14px; line-height: 1.6;">
+                        ЕГЭ Аркада - интерактивная игра для подготовки к ЕГЭ по русскому языку.<br>
+                        Проходите уровни, изучайте правила и улучшайте свои результаты!
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- Экран 9 задания -->
         <div class="screen task9-screen" id="task9Screen">
             <button class="back-btn" onclick="backToModeSelect()">← Назад</button>
@@ -1053,11 +1258,15 @@
         }
 
         // Уровни с вопросами
+        // Текущая категория
+        let currentCategory = 'arcade';
+
         const levels = [
             {
                 id: 1,
                 title: "Блок 1: Ударение",
                 description: "Ударение в глаголах прошедшего времени женского рода",
+                category: 'orthography',
                 explanation: {
                     title: "Ударение в глаголах прошедшего времени женского рода",
                     content: `
@@ -1204,6 +1413,7 @@
                 id: 2,
                 title: "Уровень 2: Пунктуация",
                 description: "Знаки препинания",
+                category: 'punctuation',
                 questions: [
                     {
                         question: "Укажите предложение с пунктуационной ошибкой:",
@@ -1244,6 +1454,7 @@
                 id: 3,
                 title: "Уровень 3: Грамматика",
                 description: "Морфология и синтаксис",
+                category: 'grammar',
                 questions: [
                     {
                         question: "В каком предложении НЕ со словом пишется раздельно?",
@@ -1279,6 +1490,7 @@
                 id: 4,
                 title: "Уровень 4: Ударения",
                 description: "Орфоэпия",
+                category: 'orthography',
                 questions: [
                     {
                         question: "В каком слове ударение падает на первый слог?",
@@ -1304,6 +1516,7 @@
                 id: 5,
                 title: "Уровень 5: Лексика",
                 description: "Словарные слова",
+                category: 'orthography',
                 questions: [
                     {
                         question: "Выберите правильный вариант:",
@@ -1456,12 +1669,48 @@
             document.getElementById('modeSelectScreen').classList.remove('active');
             
             if (mode === 'arcade') {
+                document.getElementById('topNavbar').style.display = 'flex';
+                currentCategory = 'arcade';
+                updateNavbar();
                 document.getElementById('levelSelectScreen').classList.add('active');
+                document.getElementById('levelSelectScreen').classList.add('with-navbar');
                 renderLevelSelect();
             } else if (mode === 'task9') {
+                document.getElementById('topNavbar').style.display = 'none';
                 document.getElementById('task9Screen').classList.add('active');
                 startTask9();
             }
+        }
+
+        // Переключение категории
+        function switchCategory(category) {
+            currentCategory = category;
+            updateNavbar();
+            
+            // Скрываем все экраны
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            if (category === 'settings') {
+                document.getElementById('settingsScreen').classList.add('active');
+                document.getElementById('settingsScreen').classList.add('with-navbar');
+                updateSettingsStats();
+            } else {
+                document.getElementById('levelSelectScreen').classList.add('active');
+                document.getElementById('levelSelectScreen').classList.add('with-navbar');
+                renderLevelSelect();
+            }
+        }
+
+        // Обновление активного элемента навигации
+        function updateNavbar() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.category === currentCategory) {
+                    item.classList.add('active');
+                }
+            });
         }
 
 
@@ -1471,22 +1720,52 @@
             const pathContainer = document.querySelector('.path-container');
             levelsList.innerHTML = '';
 
+            // Фильтруем уровни по категории
+            let filteredLevels = levels;
+            if (currentCategory === 'orthography') {
+                filteredLevels = levels.filter(l => l.category === 'orthography');
+            } else if (currentCategory === 'punctuation') {
+                filteredLevels = levels.filter(l => l.category === 'punctuation');
+            } else if (currentCategory === 'grammar') {
+                filteredLevels = levels.filter(l => l.category === 'grammar');
+            } else if (currentCategory === 'arcade') {
+                // Показываем все уровни
+                filteredLevels = levels;
+            }
+
+            // Обновляем заголовок
+            const headerTitle = document.querySelector('.level-select-header h1');
+            const headerDesc = document.querySelector('.level-select-header p');
+            if (currentCategory === 'orthography') {
+                headerTitle.textContent = '📝 Орфография';
+                headerDesc.textContent = 'Правила правописания';
+            } else if (currentCategory === 'punctuation') {
+                headerTitle.textContent = '✏️ Пунктуация';
+                headerDesc.textContent = 'Знаки препинания';
+            } else if (currentCategory === 'grammar') {
+                headerTitle.textContent = '📚 Грамматика';
+                headerDesc.textContent = 'Морфология и синтаксис';
+            } else {
+                headerTitle.textContent = '🗺️ Выберите уровень';
+                headerDesc.textContent = 'Проходите уровни по порядку';
+            }
+
             // Удаляем старые камни и персонажа
             const oldStones = pathContainer.querySelectorAll('.path-stone');
             oldStones.forEach(stone => stone.remove());
             const oldPlayer = pathContainer.querySelector('.player-character');
             if (oldPlayer) oldPlayer.remove();
 
-            // Находим последний пройденный уровень
-            let lastCompletedLevel = 0;
-            for (let i = 0; i < levels.length; i++) {
-                if (completedLevels[levels[i].id]) {
+            // Находим последний пройденный уровень в отфильтрованном списке
+            let lastCompletedLevel = -1;
+            for (let i = 0; i < filteredLevels.length; i++) {
+                if (completedLevels[filteredLevels[i].id]) {
                     lastCompletedLevel = i;
                 }
             }
 
             // Отображаем уровни в обычном порядке (column-reverse покажет их снизу вверх)
-            levels.forEach((level, index) => {
+            filteredLevels.forEach((level, index) => {
                 const isCompleted = completedLevels[level.id];
 
                 const levelItem = document.createElement('div');
@@ -1885,9 +2164,13 @@
                 questionTimeout = null;
             }
 
+            // Показываем панель навигации
+            document.getElementById('topNavbar').style.display = 'flex';
+
             document.getElementById('explanationScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.remove('active');
             document.getElementById('levelSelectScreen').classList.add('active');
+            document.getElementById('levelSelectScreen').classList.add('with-navbar');
             renderLevelSelect();
         }
 
@@ -1903,13 +2186,55 @@
                 questionTimeout = null;
             }
 
+            // Скрываем панель навигации
+            document.getElementById('topNavbar').style.display = 'none';
+
             // Скрываем все экраны
             document.getElementById('levelSelectScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.remove('active');
             document.getElementById('task9Screen').classList.remove('active');
+            document.getElementById('settingsScreen').classList.remove('active');
             
             // Показываем экран выбора режима
             document.getElementById('modeSelectScreen').classList.add('active');
+        }
+
+        // Обновление статистики в настройках
+        function updateSettingsStats() {
+            const statsDiv = document.getElementById('settingsStats');
+            const totalLevels = levels.length;
+            const completedCount = Object.keys(completedLevels).length;
+            const totalStars = Object.values(completedLevels).reduce((sum, level) => sum + (level.stars || 0), 0);
+            const maxStars = totalLevels * 3;
+            
+            statsDiv.innerHTML = `
+                <div>📊 Всего уровней: ${totalLevels}</div>
+                <div>✅ Пройдено: ${completedCount}</div>
+                <div>⭐ Звезд: ${totalStars}/${maxStars}</div>
+                <div>📈 Прогресс: ${Math.round((completedCount / totalLevels) * 100)}%</div>
+            `;
+        }
+
+        // Очистка прогресса
+        function clearProgress() {
+            if (confirm('Вы уверены, что хотите очистить весь прогресс? Это действие нельзя отменить.')) {
+                completedLevels = {};
+                localStorage.removeItem('completedLevels');
+                updateSettingsStats();
+                alert('Прогресс очищен!');
+            }
+        }
+
+        // Экспорт прогресса
+        function exportProgress() {
+            const progressJson = JSON.stringify(completedLevels, null, 2);
+            const blob = new Blob([progressJson], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ege_progress.json';
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         // Повтор уровня
@@ -2081,8 +2406,6 @@
     </script>
 </body>
 </html>
-
-
 
 
 
