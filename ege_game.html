@@ -790,6 +790,223 @@
             margin-top: 5px;
         }
 
+        /* Экран меню русского языка */
+        .russian-menu-screen {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .russian-menu-header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .russian-menu-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .russian-menu-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+            padding: 20px 10px;
+            overflow: hidden;
+        }
+
+        .side-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 120px;
+            z-index: 5;
+        }
+
+        .side-buttons.left {
+            align-items: flex-end;
+            padding-right: 10px;
+        }
+
+        .side-buttons.right {
+            align-items: flex-start;
+            padding-left: 10px;
+        }
+
+        .side-btn {
+            width: 110px;
+            padding: 15px 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .side-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .side-btn-icon {
+            font-size: 24px;
+        }
+
+        .center-path-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 10px;
+        }
+
+        .center-path {
+            width: 80px;
+            height: 300px;
+            background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+            border-radius: 40px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .center-path::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            background: repeating-linear-gradient(
+                90deg,
+                #a0826d 0px,
+                #a0826d 2px,
+                #8b7355 2px,
+                #8b7355 4px
+            );
+            transform: translateX(-50%);
+            border-radius: 6px;
+            opacity: 0.6;
+        }
+
+        .play-button-container {
+            padding: 20px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .play-main-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(72, 187, 120, 0.4);
+            margin: 0 auto;
+        }
+
+        .play-main-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(72, 187, 120, 0.6);
+        }
+
+        /* Нижняя навигация */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .bottom-nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .bottom-nav-item.active {
+            background: rgba(72, 187, 120, 0.3);
+        }
+
+        .bottom-nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: #48bb78;
+            border-radius: 2px;
+        }
+
+        .bottom-nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .bottom-nav-text {
+            font-size: 11px;
+            color: #e2e8f0;
+            text-align: center;
+        }
+
+        .bottom-nav-item.active .bottom-nav-text {
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        .screen.with-bottom-nav {
+            padding-bottom: 70px;
+        }
+
 
         @keyframes reveal {
             from {
@@ -1040,6 +1257,48 @@
             </div>
         </div>
 
+        <!-- Экран меню русского языка -->
+        <div class="screen russian-menu-screen" id="russianMenuScreen">
+            <div class="russian-menu-header">
+                <h1>📚 Русский язык</h1>
+                <p>Выберите раздел для изучения</p>
+            </div>
+            <div class="russian-menu-content">
+                <div class="side-buttons left">
+                    <button class="side-btn" onclick="selectTopic('orthography')">
+                        <div class="side-btn-icon">📝</div>
+                        <div>Орфография</div>
+                    </button>
+                    <button class="side-btn" onclick="selectTopic('punctuation')">
+                        <div class="side-btn-icon">✏️</div>
+                        <div>Пунктуация</div>
+                    </button>
+                    <button class="side-btn" onclick="selectTopic('text-task')">
+                        <div class="side-btn-icon">📄</div>
+                        <div>Задание с текстом</div>
+                    </button>
+                </div>
+                <div class="center-path-area">
+                    <div class="center-path"></div>
+                </div>
+                <div class="side-buttons right">
+                    <button class="side-btn" onclick="selectTopic('lexics')">
+                        <div class="side-btn-icon">📖</div>
+                        <div>Лексика и фразеология</div>
+                    </button>
+                    <button class="side-btn" onclick="selectTopic('language-norms')">
+                        <div class="side-btn-icon">📚</div>
+                        <div>Языковые нормы</div>
+                    </button>
+                </div>
+            </div>
+            <div class="play-button-container">
+                <button class="play-main-btn" onclick="goToArcade()">
+                    🎮 Играть
+                </button>
+            </div>
+        </div>
+
         <!-- Экран выбора уровней -->
         <div class="screen level-select-screen" id="levelSelectScreen">
             <div class="level-select-header">
@@ -1055,13 +1314,13 @@
 
         <!-- Экран объяснения -->
         <div class="screen explanation-screen" id="explanationScreen">
-            <button class="back-btn" onclick="backToLevelSelect()">← Назад</button>
+            <button class="back-btn" onclick="backToRussianMenu()">← Назад</button>
             <div class="explanation-content" id="explanationContent"></div>
         </div>
 
         <!-- Экран игры -->
         <div class="screen game-screen" id="gameScreen">
-            <button class="back-btn" onclick="backToLevelSelect()">← Назад</button>
+            <button class="back-btn" onclick="backToRussianMenu()">← Назад</button>
             <div class="header">
                 <h1 id="levelTitle">🎮 ЕГЭ Аркада</h1>
                 <div class="stats">
@@ -1098,8 +1357,20 @@
                     <p>📈 Точность: <span id="finalAccuracy">0</span>%</p>
                     <p>⭐ Звезды: <span id="finalStars">0</span></p>
                 </div>
-                <button class="btn" onclick="backToLevelSelect()">К карте уровней</button>
+                <button class="btn" onclick="backToRussianMenu()">К меню</button>
                 <button class="btn btn-secondary" onclick="restartLevel()">Повторить уровень</button>
+            </div>
+        </div>
+
+        <!-- Нижняя навигация -->
+        <div class="bottom-navbar" id="bottomNavbar" style="display: none;">
+            <div class="bottom-nav-item active" onclick="switchBottomNav('game')" data-nav="game">
+                <div class="bottom-nav-icon">🎮</div>
+                <div class="bottom-nav-text">Игра</div>
+            </div>
+            <div class="bottom-nav-item" onclick="switchBottomNav('settings')" data-nav="settings">
+                <div class="bottom-nav-icon">⚙️</div>
+                <div class="bottom-nav-text">Настройки</div>
             </div>
         </div>
 
@@ -1508,13 +1779,59 @@
             document.getElementById('subjectSelectScreen').classList.remove('active');
             
             if (subject === 'russian') {
-                document.getElementById('topNavbar').style.display = 'flex';
-                currentCategory = 'arcade';
-                updateNavbar();
-                document.getElementById('levelSelectScreen').classList.add('active');
-                document.getElementById('levelSelectScreen').classList.add('with-navbar');
-                renderLevelSelect();
+                document.getElementById('topNavbar').style.display = 'none';
+                document.getElementById('bottomNavbar').style.display = 'flex';
+                document.getElementById('russianMenuScreen').classList.add('active');
+                document.getElementById('russianMenuScreen').classList.add('with-bottom-nav');
+                updateBottomNav('game');
             }
+        }
+
+        // Выбор темы (пока заглушка)
+        function selectTopic(topic) {
+            console.log('Выбрана тема:', topic);
+            // Позже здесь будет логика перехода к конкретной теме
+        }
+
+        // Переход в аркаду
+        function goToArcade() {
+            document.getElementById('russianMenuScreen').classList.remove('active');
+            document.getElementById('topNavbar').style.display = 'flex';
+            document.getElementById('bottomNavbar').style.display = 'none';
+            currentCategory = 'arcade';
+            updateNavbar();
+            document.getElementById('levelSelectScreen').classList.add('active');
+            document.getElementById('levelSelectScreen').classList.add('with-navbar');
+            renderLevelSelect();
+        }
+
+        // Переключение нижней навигации
+        function switchBottomNav(nav) {
+            updateBottomNav(nav);
+            
+            // Скрываем все экраны
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            if (nav === 'settings') {
+                document.getElementById('settingsScreen').classList.add('active');
+                document.getElementById('settingsScreen').classList.add('with-bottom-nav');
+                updateSettingsStats();
+            } else if (nav === 'game') {
+                document.getElementById('russianMenuScreen').classList.add('active');
+                document.getElementById('russianMenuScreen').classList.add('with-bottom-nav');
+            }
+        }
+
+        // Обновление активного элемента нижней навигации
+        function updateBottomNav(nav) {
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.nav === nav) {
+                    item.classList.add('active');
+                }
+            });
         }
 
         // Переключение категории
@@ -1528,8 +1845,11 @@
             });
             
             if (category === 'settings') {
+                document.getElementById('topNavbar').style.display = 'none';
+                document.getElementById('bottomNavbar').style.display = 'flex';
                 document.getElementById('settingsScreen').classList.add('active');
-                document.getElementById('settingsScreen').classList.add('with-navbar');
+                document.getElementById('settingsScreen').classList.add('with-bottom-nav');
+                updateBottomNav('settings');
                 updateSettingsStats();
             } else {
                 document.getElementById('levelSelectScreen').classList.add('active');
@@ -1988,7 +2308,7 @@
             syncProgressToServer();
         }
 
-        // Возврат к выбору уровней
+        // Возврат к выбору уровней (из аркады)
         function backToLevelSelect() {
             if (fallingWordsInterval) {
                 clearInterval(fallingWordsInterval);
@@ -1999,8 +2319,9 @@
                 questionTimeout = null;
             }
 
-            // Показываем панель навигации
+            // Показываем верхнюю панель, скрываем нижнюю
             document.getElementById('topNavbar').style.display = 'flex';
+            document.getElementById('bottomNavbar').style.display = 'none';
 
             document.getElementById('explanationScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.remove('active');
@@ -2021,16 +2342,45 @@
                 questionTimeout = null;
             }
 
-            // Скрываем панель навигации
+            // Скрываем панели навигации
             document.getElementById('topNavbar').style.display = 'none';
+            document.getElementById('bottomNavbar').style.display = 'none';
 
             // Скрываем все экраны
             document.getElementById('levelSelectScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.remove('active');
             document.getElementById('settingsScreen').classList.remove('active');
+            document.getElementById('russianMenuScreen').classList.remove('active');
             
             // Показываем экран выбора предмета
             document.getElementById('subjectSelectScreen').classList.add('active');
+        }
+
+        // Возврат к меню русского языка
+        function backToRussianMenu() {
+            // Останавливаем все интервалы
+            if (fallingWordsInterval) {
+                clearInterval(fallingWordsInterval);
+                fallingWordsInterval = null;
+            }
+            if (questionTimeout) {
+                clearTimeout(questionTimeout);
+                questionTimeout = null;
+            }
+
+            // Скрываем верхнюю панель, показываем нижнюю
+            document.getElementById('topNavbar').style.display = 'none';
+            document.getElementById('bottomNavbar').style.display = 'flex';
+
+            // Скрываем все экраны
+            document.getElementById('levelSelectScreen').classList.remove('active');
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('explanationScreen').classList.remove('active');
+            
+            // Показываем меню русского языка
+            document.getElementById('russianMenuScreen').classList.add('active');
+            document.getElementById('russianMenuScreen').classList.add('with-bottom-nav');
+            updateBottomNav('game');
         }
 
         // Обновление статистики в настройках
