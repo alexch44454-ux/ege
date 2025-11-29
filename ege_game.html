@@ -1747,6 +1747,19 @@
 
         // Инициализация
         function init() {
+            // Скрываем все экраны
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Скрываем все панели навигации
+            document.getElementById('topNavbar').style.display = 'none';
+            document.getElementById('bottomNavbar').style.display = 'none';
+            
+            // Показываем только экран выбора предмета
+            document.getElementById('subjectSelectScreen').classList.add('active');
+            
+            // Загружаем прогресс
             loadProgressFromServer();
         }
 
@@ -2457,5 +2470,4 @@
     </script>
 </body>
 </html>
-
 
