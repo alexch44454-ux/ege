@@ -12,27 +12,40 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
 
         .game-container {
-            width: 100%;
-            max-width: 500px;
+            width: 100vw;
             height: 100vh;
+            height: 100dvh; /* Динамическая высота viewport для мобильных */
+            max-width: 100%;
             display: flex;
             flex-direction: column;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             overflow: hidden;
-            margin: 0 auto;
+            margin: 0;
+            padding: 0;
         }
 
         /* Верхняя панель навигации */
@@ -41,8 +54,7 @@
             top: 0;
             left: 0;
             right: 0;
-            max-width: 500px;
-            margin: 0 auto;
+            width: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
@@ -741,6 +753,8 @@
             align-items: center;
             justify-content: center;
             padding: 40px 20px;
+            width: 100%;
+            height: 100%;
         }
 
         .subject-select-header {
@@ -806,7 +820,8 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
         }
 
         .russian-menu-header {
@@ -965,8 +980,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            max-width: 500px;
-            margin: 0 auto;
+            width: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             border-top: 2px solid rgba(255, 255, 255, 0.1);
@@ -1437,10 +1451,6 @@
     <script>
         // Инициализация Telegram WebApp
         let tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-        }
 
         // Уровни с вопросами
         // Текущая категория
@@ -1797,6 +1807,14 @@
 
         // Инициализация
         function init() {
+            // Настройка Telegram WebApp для полноэкранного режима
+            if (typeof tg !== 'undefined' && tg) {
+                tg.ready();
+                tg.expand();
+                // Отключаем визуальные эффекты для лучшей производительности
+                tg.enableClosingConfirmation(false);
+            }
+            
             // Показываем только экран выбора предмета
             showScreen('subjectSelectScreen', {
                 topNavbar: false,
@@ -2495,4 +2513,5 @@
     </script>
 </body>
 </html>
+
 
