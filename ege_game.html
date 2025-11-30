@@ -122,10 +122,17 @@
             bottom: 0;
             display: none;
             flex-direction: column;
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
         .screen.active {
             display: flex;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
         }
 
         /* Экран выбора уровней */
@@ -1745,19 +1752,56 @@
         let consecutiveCorrect = 0;
         let completedLevels = JSON.parse(localStorage.getItem('completedLevels') || '{}');
 
-        // Инициализация
-        function init() {
-            // Скрываем все экраны
+        // Централизованная функция для переключения экранов
+        function showScreen(screenId, options = {}) {
+            // Скрываем ВСЕ экраны
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
+                screen.classList.remove('with-navbar');
+                screen.classList.remove('with-bottom-nav');
             });
             
-            // Скрываем все панели навигации
-            document.getElementById('topNavbar').style.display = 'none';
-            document.getElementById('bottomNavbar').style.display = 'none';
+            // Управление панелями навигации
+            const topNavbar = document.getElementById('topNavbar');
+            const bottomNavbar = document.getElementById('bottomNavbar');
             
+            // По умолчанию скрываем обе панели
+            if (options.topNavbar !== undefined) {
+                topNavbar.style.display = options.topNavbar ? 'flex' : 'none';
+            } else {
+                topNavbar.style.display = 'none';
+            }
+            
+            if (options.bottomNavbar !== undefined) {
+                bottomNavbar.style.display = options.bottomNavbar ? 'flex' : 'none';
+            } else {
+                bottomNavbar.style.display = 'none';
+            }
+            
+            // Показываем нужный экран
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                
+                // Добавляем дополнительные классы если нужно
+                if (options.withNavbar) {
+                    targetScreen.classList.add('with-navbar');
+                }
+                if (options.withBottomNav) {
+                    targetScreen.classList.add('with-bottom-nav');
+                }
+            } else {
+                console.error('Экран не найден:', screenId);
+            }
+        }
+
+        // Инициализация
+        function init() {
             // Показываем только экран выбора предмета
-            document.getElementById('subjectSelectScreen').classList.add('active');
+            showScreen('subjectSelectScreen', {
+                topNavbar: false,
+                bottomNavbar: false
+            });
             
             // Загружаем прогресс
             loadProgressFromServer();
@@ -1810,13 +1854,12 @@
 
         // Выбор предмета
         function selectSubject(subject) {
-            document.getElementById('subjectSelectScreen').classList.remove('active');
-            
             if (subject === 'russian') {
-                document.getElementById('topNavbar').style.display = 'none';
-                document.getElementById('bottomNavbar').style.display = 'flex';
-                document.getElementById('russianMenuScreen').classList.add('active');
-                document.getElementById('russianMenuScreen').classList.add('with-bottom-nav');
+                showScreen('russianMenuScreen', {
+                    topNavbar: false,
+                    bottomNavbar: true,
+                    withBottomNav: true
+                });
                 updateBottomNav('game');
             }
         }
@@ -1829,33 +1872,34 @@
 
         // Переход в аркаду
         function goToArcade() {
-            document.getElementById('russianMenuScreen').classList.remove('active');
-            document.getElementById('topNavbar').style.display = 'flex';
-            document.getElementById('bottomNavbar').style.display = 'none';
             currentCategory = 'arcade';
             updateNavbar();
-            document.getElementById('levelSelectScreen').classList.add('active');
-            document.getElementById('levelSelectScreen').classList.add('with-navbar');
-            renderLevelSelect();
+            showScreen('levelSelectScreen', {
+                topNavbar: true,
+                bottomNavbar: false,
+                withNavbar: true
+            });
+                renderLevelSelect();
         }
 
         // Переключение нижней навигации
         function switchBottomNav(nav) {
             updateBottomNav(nav);
             
-            // Скрываем все экраны
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            
             if (nav === 'settings') {
-                document.getElementById('settingsScreen').classList.add('active');
-                document.getElementById('settingsScreen').classList.add('with-bottom-nav');
+                showScreen('settingsScreen', {
+                    topNavbar: false,
+                    bottomNavbar: true,
+                    withBottomNav: true
+                });
                 updateSettingsStats();
             } else if (nav === 'game') {
                 // Возвращаемся в главное меню русского языка
-                document.getElementById('russianMenuScreen').classList.add('active');
-                document.getElementById('russianMenuScreen').classList.add('with-bottom-nav');
+                showScreen('russianMenuScreen', {
+                    topNavbar: false,
+                    bottomNavbar: true,
+                    withBottomNav: true
+                });
             }
         }
 
@@ -1874,22 +1918,16 @@
             currentCategory = category;
             updateNavbar();
             
-            // Скрываем все экраны
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            
             if (category === 'settings') {
                 // Переход в настройки из аркады - возвращаемся в меню русского языка
-                document.getElementById('topNavbar').style.display = 'none';
-                document.getElementById('bottomNavbar').style.display = 'flex';
-                document.getElementById('russianMenuScreen').classList.add('active');
-                document.getElementById('russianMenuScreen').classList.add('with-bottom-nav');
                 switchBottomNav('settings');
             } else {
                 // Остаемся в аркаде, просто меняем категорию
-                document.getElementById('levelSelectScreen').classList.add('active');
-                document.getElementById('levelSelectScreen').classList.add('with-navbar');
+                showScreen('levelSelectScreen', {
+                    topNavbar: true,
+                    bottomNavbar: false,
+                    withNavbar: true
+                });
                 renderLevelSelect();
             }
         }
@@ -2135,9 +2173,10 @@
 
         // Показать объяснение
         function showExplanation(level) {
-            document.getElementById('levelSelectScreen').classList.remove('active');
-            document.getElementById('gameScreen').classList.remove('active');
-            document.getElementById('explanationScreen').classList.add('active');
+            showScreen('explanationScreen', {
+                topNavbar: false,
+                bottomNavbar: false
+            });
 
             const explanationContent = document.getElementById('explanationContent');
             explanationContent.innerHTML = `
@@ -2151,8 +2190,10 @@
 
         // Начать практику (после объяснения)
         function startPractice() {
-            document.getElementById('explanationScreen').classList.remove('active');
-            document.getElementById('gameScreen').classList.add('active');
+            showScreen('gameScreen', {
+                topNavbar: false,
+                bottomNavbar: false
+            });
             document.getElementById('levelTitle').textContent = currentLevel.title;
             document.getElementById('levelComplete').classList.remove('show');
             document.getElementById('questionContainer').classList.remove('hidden');
@@ -2355,14 +2396,11 @@
                 questionTimeout = null;
             }
 
-            // Показываем верхнюю панель, скрываем нижнюю
-            document.getElementById('topNavbar').style.display = 'flex';
-            document.getElementById('bottomNavbar').style.display = 'none';
-
-            document.getElementById('explanationScreen').classList.remove('active');
-            document.getElementById('gameScreen').classList.remove('active');
-            document.getElementById('levelSelectScreen').classList.add('active');
-            document.getElementById('levelSelectScreen').classList.add('with-navbar');
+            showScreen('levelSelectScreen', {
+                topNavbar: true,
+                bottomNavbar: false,
+                withNavbar: true
+            });
             renderLevelSelect();
         }
 
@@ -2378,18 +2416,11 @@
                 questionTimeout = null;
             }
 
-            // Скрываем панели навигации
-            document.getElementById('topNavbar').style.display = 'none';
-            document.getElementById('bottomNavbar').style.display = 'none';
-
-            // Скрываем все экраны
-            document.getElementById('levelSelectScreen').classList.remove('active');
-            document.getElementById('gameScreen').classList.remove('active');
-            document.getElementById('settingsScreen').classList.remove('active');
-            document.getElementById('russianMenuScreen').classList.remove('active');
-            
             // Показываем экран выбора предмета
-            document.getElementById('subjectSelectScreen').classList.add('active');
+            showScreen('subjectSelectScreen', {
+                topNavbar: false,
+                bottomNavbar: false
+            });
         }
 
         // Возврат к меню русского языка
@@ -2404,18 +2435,12 @@
                 questionTimeout = null;
             }
 
-            // Скрываем верхнюю панель, показываем нижнюю
-            document.getElementById('topNavbar').style.display = 'none';
-            document.getElementById('bottomNavbar').style.display = 'flex';
-
-            // Скрываем все экраны
-            document.getElementById('levelSelectScreen').classList.remove('active');
-            document.getElementById('gameScreen').classList.remove('active');
-            document.getElementById('explanationScreen').classList.remove('active');
-            
             // Показываем меню русского языка
-            document.getElementById('russianMenuScreen').classList.add('active');
-            document.getElementById('russianMenuScreen').classList.add('with-bottom-nav');
+            showScreen('russianMenuScreen', {
+                topNavbar: false,
+                bottomNavbar: true,
+                withBottomNav: true
+            });
             updateBottomNav('game');
         }
 
