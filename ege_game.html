@@ -192,7 +192,7 @@
         .path-container {
             position: relative;
             width: 100%;
-            min-height: auto;
+            min-height: 100%;
             padding: 0;
             padding-top: 0;
             padding-bottom: 20px;
@@ -206,19 +206,6 @@
             padding-top: 0;
         }
 
-        .start-label {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(72, 187, 120, 0.9);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 4;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
 
         .path-line {
             position: absolute;
@@ -228,6 +215,7 @@
             width: 60px;
             transform: translateX(-50%);
             z-index: 1;
+            min-height: 100%;
         }
 
         .path-line::before {
@@ -441,74 +429,6 @@
             font-size: 16px;
         }
 
-        .player-character {
-            position: absolute;
-            left: 50%;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            z-index: 6;
-            box-shadow: 
-                0 4px 15px rgba(0, 0, 0, 0.4),
-                0 0 20px rgba(72, 187, 120, 0.5);
-            transform: translateX(-50%);
-            transition: bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            border: 3px solid #2f855a;
-        }
-
-        .player-character::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-            animation: shine 2s ease-in-out infinite;
-        }
-
-        .player-character:hover {
-            transform: translateX(-50%) scale(1.15);
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(-8px);
-            }
-        }
-
-        @keyframes shine {
-            0%, 100% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .player-character.walking {
-            animation: walk 0.6s ease-in-out infinite;
-        }
-
-        @keyframes walk {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(-50%) translateY(-3px) rotate(-5deg);
-            }
-            75% {
-                transform: translateX(-50%) translateY(-3px) rotate(5deg);
-            }
-        }
 
         /* Экран игры */
         .game-screen {
@@ -1303,7 +1223,6 @@
             <div class="path-container">
                 <div class="path-line"></div>
                 <div class="levels-list" id="levelsList"></div>
-                <div class="start-label">НАЧАТЬ</div>
             </div>
         </div>
 
@@ -1832,11 +1751,9 @@
 
             // Заголовок удален, больше не обновляем
 
-            // Удаляем старые камни и персонажа
+            // Удаляем старые камни
             const oldStones = pathContainer.querySelectorAll('.path-stone');
             oldStones.forEach(stone => stone.remove());
-            const oldPlayer = pathContainer.querySelector('.player-character');
-            if (oldPlayer) oldPlayer.remove();
 
             // Находим последний пройденный уровень в отфильтрованном списке
             let lastCompletedLevel = -1;
@@ -1918,92 +1835,8 @@
                 }
             });
 
-            // Добавляем персонажа на тропинку
-            const playerChar = document.createElement('div');
-            playerChar.className = 'player-character';
-            playerChar.textContent = '🦉';
-            playerChar.title = 'Ваш прогресс';
-            pathContainer.appendChild(playerChar);
-
-            // Позиционируем персонажа на уровне последнего пройденного уровня
-            setTimeout(() => {
-                positionPlayerOnPath(lastCompletedLevel);
-                
-                // Прокручиваем к персонажу
-                const levelSelectScreen = document.getElementById('levelSelectScreen');
-                if (lastCompletedLevel >= 0 && lastCompletedLevel < levelItems.length) {
-                    // Учитываем обратный порядок отображения
-                    const visualIndex = levelItems.length - 1 - lastCompletedLevel;
-                    const targetLevel = levelItems[visualIndex];
-                    if (targetLevel) {
-                        // Ждем, пока элементы отрендерятся
-                        requestAnimationFrame(() => {
-                            const targetPosition = targetLevel.offsetTop - levelSelectScreen.clientHeight / 2 + targetLevel.offsetHeight / 2;
-                            levelSelectScreen.scrollTo({
-                                top: Math.max(0, targetPosition),
-                                behavior: 'smooth'
-                            });
-                        });
-                    }
-                } else {
-                    // Если нет пройденных уровней, прокручиваем вниз
-                    setTimeout(() => {
-                levelSelectScreen.scrollTop = levelSelectScreen.scrollHeight;
-                    }, 50);
-                }
-            }, 150);
         }
 
-        // Позиционирование персонажа на тропинке
-        function positionPlayerOnPath(levelIndex) {
-            const playerChar = document.querySelector('.player-character');
-            const levelsList = document.getElementById('levelsList');
-            const levelItems = levelsList.querySelectorAll('.level-item');
-            
-            if (!playerChar || levelItems.length === 0) return;
-
-            // Если нет пройденных уровней, ставим персонажа внизу (начало тропинки)
-            if (levelIndex < 0) {
-                playerChar.style.top = 'auto';
-                playerChar.style.bottom = '20px';
-                playerChar.style.animation = 'float 3s ease-in-out infinite';
-                playerChar.classList.remove('walking');
-                return;
-            }
-
-            // Учитываем, что уровни отображаются в обратном порядке (column-reverse)
-            // Поэтому последний уровень в массиве - это первый визуально (внизу)
-            const visualIndex = levelItems.length - 1 - levelIndex;
-            const targetLevel = levelItems[visualIndex];
-            
-            if (!targetLevel) {
-                playerChar.style.top = 'auto';
-                playerChar.style.bottom = '20px';
-                playerChar.style.animation = 'float 3s ease-in-out infinite';
-                playerChar.classList.remove('walking');
-                return;
-            }
-
-            // Используем offsetTop для позиционирования относительно levelsList
-            const levelsListRect = levelsList.getBoundingClientRect();
-            const levelRect = targetLevel.getBoundingClientRect();
-            
-            // Вычисляем позицию центра уровня относительно levelsList
-            const levelCenter = levelRect.top - levelsListRect.top + levelRect.height / 2;
-            
-            // Позиционируем персонажа на уровне центра выбранного уровня
-            // Добавляем отступ от верха levelsList
-            const pathContainer = document.querySelector('.path-container');
-            const pathContainerPadding = 40; // padding-top path-container
-            const topPosition = pathContainerPadding + levelCenter;
-            
-            playerChar.style.top = `${topPosition}px`;
-            playerChar.style.bottom = 'auto';
-            playerChar.style.animation = 'walk 0.6s ease-in-out infinite';
-            
-            // Добавляем класс для анимации ходьбы
-            playerChar.classList.add('walking');
-        }
 
         // Запуск уровня
         function startLevel(level) {
@@ -2286,6 +2119,7 @@
     </script>
 </body>
 </html>
+
 
 
 
