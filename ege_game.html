@@ -188,25 +188,11 @@
             border-radius: 4px;
         }
 
-        .level-select-header {
-            display: none;
-        }
-
-        .level-select-header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .level-select-header p {
-            font-size: 14px;
-            opacity: 0.8;
-        }
 
         .path-container {
             position: relative;
             width: 100%;
-            min-height: 100%;
+            min-height: auto;
             padding: 0;
             padding-top: 0;
             padding-bottom: 20px;
@@ -330,7 +316,12 @@
             flex-direction: column-reverse;
             align-items: center;
             gap: 30px;
-            padding-top: 60px; /* Отступ для верхней панели навигации */
+            padding-top: 0;
+            margin-top: 0;
+        }
+        
+        .levels-list .level-item:last-child {
+            margin-top: 60px; /* Отступ только для последнего элемента (первого визуально из-за column-reverse) */
         }
 
         .level-item {
@@ -1350,10 +1341,6 @@
 
         <!-- Экран выбора уровней -->
         <div class="screen level-select-screen" id="levelSelectScreen">
-            <div class="level-select-header">
-                <h1>🗺️ Выберите уровень</h1>
-                <p>Проходите уровни по порядку</p>
-            </div>
             <div class="path-container">
                 <div class="path-line"></div>
                 <div class="levels-list" id="levelsList"></div>
@@ -1990,22 +1977,7 @@
                 filteredLevels = levels;
             }
 
-            // Обновляем заголовок
-            const headerTitle = document.querySelector('.level-select-header h1');
-            const headerDesc = document.querySelector('.level-select-header p');
-            if (currentCategory === 'orthography') {
-                headerTitle.textContent = '📝 Орфография';
-                headerDesc.textContent = 'Правила правописания';
-            } else if (currentCategory === 'punctuation') {
-                headerTitle.textContent = '✏️ Пунктуация';
-                headerDesc.textContent = 'Знаки препинания';
-            } else if (currentCategory === 'grammar') {
-                headerTitle.textContent = '📚 Грамматика';
-                headerDesc.textContent = 'Морфология и синтаксис';
-            } else {
-                headerTitle.textContent = '🗺️ Выберите уровень';
-                headerDesc.textContent = 'Проходите уровни по порядку';
-            }
+            // Заголовок удален, больше не обновляем
 
             // Удаляем старые камни и персонажа
             const oldStones = pathContainer.querySelectorAll('.path-stone');
@@ -2523,6 +2495,7 @@
     </script>
 </body>
 </html>
+
 
 
 
