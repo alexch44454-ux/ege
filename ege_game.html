@@ -21,9 +21,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: #000;
             position: fixed;
             top: 0;
             left: 0;
@@ -34,8 +34,7 @@
         .game-container {
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Динамическая высота viewport для мобильных */
-            max-width: 100%;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
             position: fixed;
@@ -44,8 +43,6 @@
             right: 0;
             bottom: 0;
             overflow: hidden;
-            margin: 0;
-            padding: 0;
         }
 
         /* Верхняя панель навигации */
@@ -55,18 +52,14 @@
             left: 0;
             right: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            background: #f0f0f0;
+            border-bottom: 1px solid #ccc;
             z-index: 1000;
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding: 10px 5px;
             padding-top: calc(10px + env(safe-area-inset-top, 0));
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            margin: 0;
-            height: auto;
         }
 
         .nav-item {
@@ -77,30 +70,12 @@
             justify-content: center;
             padding: 8px 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-            position: relative;
+            border-radius: 4px;
             min-width: 0;
         }
 
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
         .nav-item.active {
-            background: rgba(72, 187, 120, 0.3);
-        }
-
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 3px;
-            background: #48bb78;
-            border-radius: 2px;
+            background: #ddd;
         }
 
         .nav-item-icon {
@@ -109,85 +84,166 @@
         }
 
         .nav-item-text {
-            font-size: 10px;
-            color: #e2e8f0;
+            font-size: 11px;
             text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        }
+
+        /* Нижняя панель навигации */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             width: 100%;
+            background: #f0f0f0;
+            border-top: 1px solid #ccc;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 5px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 0));
         }
 
-        .nav-item.active .nav-item-text {
-            color: #48bb78;
-            font-weight: bold;
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 5px;
+            cursor: pointer;
+            border-radius: 4px;
         }
 
-        /* Отступ для контента под панелью */
-        .screen.with-navbar {
-            padding-top: 0;
+        .bottom-nav-item.active {
+            background: #ddd;
+        }
+
+        .bottom-nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .bottom-nav-text {
+            font-size: 11px;
         }
 
         /* Экраны */
         .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
             display: none;
-            flex-direction: column;
-            z-index: 1;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
         }
 
         .screen.active {
+            display: block;
+        }
+
+        .screen.with-navbar {
+            padding-top: 60px;
+        }
+
+        .screen.with-bottom-nav {
+            padding-bottom: 60px;
+        }
+
+        /* Экран выбора предмета */
+        .subject-select-screen {
             display: flex;
-            opacity: 1;
-            pointer-events: auto;
-            z-index: 10;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .subject-btn {
+            width: 200px;
+            padding: 20px;
+            margin: 10px;
+            font-size: 18px;
+            border: 2px solid #000;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .subject-btn:hover {
+            background: #f0f0f0;
+        }
+
+        /* Экран меню русского языка */
+        .russian-menu-screen {
+            padding: 20px;
+        }
+
+        .russian-menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .russian-menu-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 300px;
+            margin: 20px 0;
+        }
+
+        .side-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .side-btn {
+            padding: 15px 20px;
+            border: 1px solid #000;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .side-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .center-path-area {
+            flex: 1;
+            height: 200px;
+            margin: 0 20px;
+            border: 1px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .play-main-btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            border: 2px solid #000;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .play-main-btn:hover {
+            background: #f0f0f0;
         }
 
         /* Экран выбора уровней */
         .level-select-screen {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            padding: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            position: relative;
-            width: 100%;
-            height: 100%;
+            padding: 20px;
         }
-
-        .level-select-screen::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(72, 187, 120, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(72, 187, 120, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .level-select-screen::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .level-select-screen::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .level-select-screen::-webkit-scrollbar-thumb {
-            background: rgba(72, 187, 120, 0.5);
-            border-radius: 4px;
-        }
-
 
         .path-container {
             position: relative;
@@ -196,117 +252,6 @@
             padding: 0;
             padding-top: 0;
             padding-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            z-index: 1;
-        }
-        
-        .level-select-screen.with-navbar .path-container {
-            padding-top: 0;
-        }
-
-        .start-label {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(72, 187, 120, 0.9);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 4;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .path-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 60px;
-            transform: translateX(-50%);
-            z-index: 1;
-        }
-
-        .path-line::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 12px;
-            background: linear-gradient(180deg, #8b7355 0%, #6b5d4f 50%, #4a3d2e 100%);
-            transform: translateX(-50%);
-            border-radius: 6px;
-            box-shadow: 
-                inset 0 0 10px rgba(0, 0, 0, 0.3),
-                0 0 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .path-line::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 8px;
-            background: repeating-linear-gradient(
-                90deg,
-                #a0826d 0px,
-                #a0826d 2px,
-                #8b7355 2px,
-                #8b7355 4px
-            );
-            transform: translateX(-50%);
-            border-radius: 4px;
-            opacity: 0.6;
-        }
-
-        /* Камни на тропинке */
-        .path-stone {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, #5a4a3a 0%, #3d2f20 100%);
-            border-radius: 50%;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-            z-index: 2;
-        }
-
-        .path-stone::before {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 5px;
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-        }
-
-        /* Декоративные элементы по бокам тропинки */
-        .path-decoration {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 0;
-            opacity: 0.3;
-        }
-
-        .path-decoration.grass-left {
-            left: calc(50% - 50px);
-            font-size: 20px;
-        }
-
-        .path-decoration.grass-right {
-            left: calc(50% + 50px);
-            font-size: 20px;
         }
 
         .levels-list {
@@ -319,9 +264,9 @@
             padding-top: 0;
             margin-top: 0;
         }
-        
+
         .levels-list .level-item:last-child {
-            margin-top: 60px; /* Отступ только для последнего элемента (первого визуально из-за column-reverse) */
+            margin-top: 60px;
         }
 
         .level-item {
@@ -332,306 +277,179 @@
             max-width: 400px;
         }
 
-        .level-item:nth-child(odd) {
-            flex-direction: row;
-        }
-
-        .level-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
         .level-node {
-            width: 70px;
-            height: 70px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            border: 2px solid #000;
+            background: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 3;
-            border: 4px solid;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            flex-shrink: 0;
+            margin-right: 15px;
         }
 
-        .level-node.locked {
-            background: #4a5568;
-            border-color: #2d3748;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        .level-node.available {
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            border-color: #2f855a;
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 20px rgba(72, 187, 120, 0.6);
+        .level-node:hover {
+            background: #f0f0f0;
         }
 
         .level-node.completed {
-            background: linear-gradient(135deg, #f6e05e, #ecc94b);
-            border-color: #d69e2e;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .level-node.completed:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(246, 224, 94, 0.8);
-        }
-
-        .level-node.available::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid #48bb78;
-            animation: ring-pulse 2s infinite;
-        }
-
-        @keyframes ring-pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
+            background: #e0e0e0;
         }
 
         .level-info {
             flex: 1;
-            margin: 0 15px;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .level-info h3 {
-            font-size: 16px;
-            margin-bottom: 4px;
-            color: #fff;
+            margin-bottom: 5px;
         }
 
         .level-info p {
-            font-size: 12px;
-            opacity: 0.8;
-            color: #e2e8f0;
+            font-size: 14px;
+            color: #666;
         }
 
         .level-stars {
             margin-top: 5px;
-            font-size: 16px;
+            font-size: 14px;
         }
 
-        .player-character {
+        .start-label {
             position: absolute;
+            bottom: 20px;
             left: 50%;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            z-index: 6;
-            box-shadow: 
-                0 4px 15px rgba(0, 0, 0, 0.4),
-                0 0 20px rgba(72, 187, 120, 0.5);
             transform: translateX(-50%);
-            transition: bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fff;
+            padding: 8px 16px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Экран объяснения */
+        .explanation-screen {
+            padding: 20px;
+        }
+
+        .explanation-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .explanation-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .explanation-content h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .explanation-content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .start-practice-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 16px;
+            border: 2px solid #000;
+            background: #fff;
             cursor: pointer;
-            border: 3px solid #2f855a;
+            border-radius: 4px;
         }
 
-        .player-character::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-            animation: shine 2s ease-in-out infinite;
-        }
-
-        .player-character:hover {
-            transform: translateX(-50%) scale(1.15);
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(-8px);
-            }
-        }
-
-        @keyframes shine {
-            0%, 100% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .player-character.walking {
-            animation: walk 0.6s ease-in-out infinite;
-        }
-
-        @keyframes walk {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(-50%) translateY(-3px) rotate(-5deg);
-            }
-            75% {
-                transform: translateX(-50%) translateY(-3px) rotate(5deg);
-            }
+        .start-practice-btn:hover {
+            background: #f0f0f0;
         }
 
         /* Экран игры */
         .game-screen {
-            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            border: 1px solid #000;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .back-btn:hover {
+            background: #f0f0f0;
         }
 
         .header {
-            padding: 20px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            z-index: 10;
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .stats {
             display: flex;
-            justify-content: space-around;
-            font-size: 16px;
+            gap: 20px;
+            margin-bottom: 15px;
         }
 
         .stat-item {
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
 
         .stat-value {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
-            color: #ffd700;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            border: 1px solid #000;
+            background: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #000;
+            width: 0%;
+            transition: width 0.3s;
         }
 
         .game-area {
-            flex: 1;
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ccc;
             position: relative;
-            overflow: hidden;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .question-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px 20px 0 0;
-            transform: translateY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .question-container.hidden {
-            transform: translateY(100%);
-        }
-
-        .question-text {
-            font-size: 18px;
             margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .answers {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .answer-btn {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .answer-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .answer-btn.correct {
-            background: #4caf50;
-            border-color: #4caf50;
-        }
-
-        .answer-btn.wrong {
-            background: #f44336;
-            border-color: #f44336;
-        }
-
-        .answer-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+            overflow: hidden;
         }
 
         .falling-word {
             position: absolute;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: #000;
             animation: fall linear;
-            pointer-events: none;
         }
 
         @keyframes fall {
             from {
                 top: -50px;
-                opacity: 1;
             }
             to {
-                top: 100vh;
-                opacity: 0;
+                top: 100%;
             }
         }
 
@@ -639,620 +457,139 @@
             position: absolute;
             width: 10px;
             height: 10px;
-            background: #ffd700;
+            background: #000;
             border-radius: 50%;
-            pointer-events: none;
-            animation: particle-float 2s ease-out forwards;
         }
 
-        @keyframes particle-float {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(0);
-            }
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .answer-btn {
+            padding: 15px;
+            border: 2px solid #000;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            background: #f0f0f0;
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .answer-btn.correct {
+            background: #90ee90;
+        }
+
+        .answer-btn.wrong {
+            background: #ff6b6b;
         }
 
         .level-complete {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
             display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
+            text-align: center;
             padding: 20px;
         }
 
         .level-complete.show {
-            display: flex;
-        }
-
-        .level-complete h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
+            display: block;
         }
 
         .final-stats {
-            text-align: center;
-            margin-bottom: 30px;
+            margin: 20px 0;
         }
 
         .final-stats p {
-            font-size: 20px;
             margin: 10px 0;
+            font-size: 16px;
         }
 
         .btn {
             padding: 15px 30px;
-            background: #4caf50;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 18px;
+            margin: 10px;
+            border: 2px solid #000;
+            background: #fff;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 5px;
+            border-radius: 4px;
+            font-size: 16px;
         }
 
         .btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
+            background: #f0f0f0;
         }
 
         .btn-secondary {
-            background: #2196F3;
+            background: #e0e0e0;
         }
 
-        .btn-secondary:hover {
-            background: #1976D2;
-        }
-
-        .progress-bar {
-            height: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            margin: 10px 0;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #4caf50;
-            transition: width 0.3s ease;
-        }
-
-        .back-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            z-index: 20;
-        }
-
-        /* Экран выбора предмета */
-        .subject-select-screen {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .subject-select-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .subject-select-header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .subject-select-header p {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .subject-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .subject-btn {
-            padding: 25px 30px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            color: #fff;
-            font-size: 22px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .subject-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .subject-btn .subject-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .subject-btn .subject-description {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        /* Экран меню русского языка */
-        .russian-menu-screen {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            padding: 0;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-        }
-
-        .russian-menu-header {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 10;
-            flex-shrink: 0;
-        }
-
-        .russian-menu-header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .russian-menu-content {
-            flex: 1;
-            display: flex;
-            position: relative;
-            padding: 20px 5px;
-            overflow: hidden;
-            min-height: 0;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .side-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 115px;
-            z-index: 5;
-            flex-shrink: 0;
-            justify-content: center;
-            max-height: 100%;
-            overflow-y: auto;
-        }
-
-        .side-buttons.left {
-            align-items: flex-end;
-            padding-right: 5px;
-        }
-
-        .side-buttons.right {
-            align-items: flex-start;
-            padding-left: 5px;
-        }
-
-        .side-btn {
-            width: 110px;
-            padding: 12px 8px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            color: #fff;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            line-height: 1.3;
-        }
-
-        .side-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .side-btn-icon {
-            font-size: 24px;
-        }
-
-        .center-path-area {
-            flex: 0 0 90px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin: 0 5px;
-            min-width: 90px;
-            max-width: 90px;
-        }
-
-        .center-path {
-            width: 70px;
-            height: 100%;
-            max-height: 350px;
-            min-height: 200px;
-            background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
-            border-radius: 35px;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .center-path::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 12px;
-            background: repeating-linear-gradient(
-                90deg,
-                #a0826d 0px,
-                #a0826d 2px,
-                #8b7355 2px,
-                #8b7355 4px
-            );
-            transform: translateX(-50%);
-            border-radius: 6px;
-            opacity: 0.6;
-        }
-
-        .play-button-container {
-            padding: 20px;
-            text-align: center;
-            z-index: 10;
-            flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .play-main-btn {
-            width: 100%;
-            max-width: 300px;
-            padding: 20px 40px;
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            border: none;
-            border-radius: 20px;
-            color: #fff;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 25px rgba(72, 187, 120, 0.4);
-            margin: 0 auto;
-        }
-
-        .play-main-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(72, 187, 120, 0.6);
-        }
-
-        /* Нижняя навигация */
-        .bottom-navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-top: 2px solid rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .bottom-nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-            position: relative;
-        }
-
-        .bottom-nav-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .bottom-nav-item.active {
-            background: rgba(72, 187, 120, 0.3);
-        }
-
-        .bottom-nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 3px;
-            background: #48bb78;
-            border-radius: 2px;
-        }
-
-        .bottom-nav-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
-        .bottom-nav-text {
-            font-size: 11px;
-            color: #e2e8f0;
-            text-align: center;
-        }
-
-        .bottom-nav-item.active .bottom-nav-text {
-            color: #48bb78;
-            font-weight: bold;
-        }
-
-        .screen.with-bottom-nav {
-            padding-bottom: 80px;
-        }
-
-        .russian-menu-screen.with-bottom-nav .play-button-container {
-            padding-bottom: 80px;
-        }
-
-
-        @keyframes reveal {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Экран объяснения */
-        .explanation-screen {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .explanation-content {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .explanation-content h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .explanation-content h3 {
-            font-size: 20px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            color: #fff;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 10px;
-        }
-
-        .explanation-content p {
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 15px;
-            color: #e2e8f0;
-        }
-
-        .explanation-content ul {
-            margin-left: 20px;
-            margin-bottom: 20px;
-        }
-
-        .explanation-content li {
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 10px;
-            color: #e2e8f0;
-        }
-
-        .explanation-content .example {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border-left: 4px solid #48bb78;
-        }
-
-        .explanation-content .example-title {
-            font-weight: bold;
-            color: #48bb78;
-            margin-bottom: 10px;
-        }
-
-        .explanation-content .exception {
-            background: rgba(255, 193, 7, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border-left: 4px solid #ffc107;
-        }
-
-        .explanation-content .exception-title {
-            font-weight: bold;
-            color: #ffc107;
-            margin-bottom: 10px;
-        }
-
-        .explanation-words {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .explanation-word {
-            background: rgba(72, 187, 120, 0.3);
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            border: 2px solid rgba(72, 187, 120, 0.5);
-        }
-
-        .explanation-word .accent {
-            color: #ffd700;
-            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-        }
-
-        .start-practice-btn {
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            border: none;
-            border-radius: 15px;
-            color: #fff;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 30px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .start-practice-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        .question-container.hidden {
+            display: none;
         }
 
         /* Экран настроек */
         .settings-screen {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
-            overflow-y: auto;
         }
 
         .settings-content {
             max-width: 600px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .settings-content h2 {
-            font-size: 28px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
         }
 
         .settings-section {
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .settings-section:last-child {
-            border-bottom: none;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
         .settings-section h3 {
-            font-size: 20px;
             margin-bottom: 15px;
-            color: #fff;
         }
 
         .settings-stats {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            color: #e2e8f0;
-            font-size: 14px;
-            line-height: 1.8;
+            margin: 15px 0;
+        }
+
+        .settings-stats div {
+            margin: 10px 0;
         }
 
         .settings-btn {
             width: 100%;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
+            margin: 10px 0;
+            border: 1px solid #000;
+            background: #fff;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
+            border-radius: 4px;
             text-align: left;
         }
 
         .settings-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(5px);
-        }
-
-        .settings-btn:last-child {
-            margin-bottom: 0;
+            background: #f0f0f0;
         }
     </style>
 </head>
@@ -1261,7 +598,7 @@
         <!-- Верхняя панель навигации -->
         <div class="top-navbar" id="topNavbar" style="display: none;">
             <div class="nav-item active" onclick="switchCategory('arcade')" data-category="arcade">
-                <div class="nav-item-icon">🎯</div>
+                <div class="nav-item-icon">🎮</div>
                 <div class="nav-item-text">Аркада</div>
             </div>
             <div class="nav-item" onclick="switchCategory('orthography')" data-category="orthography">
@@ -1284,65 +621,48 @@
 
         <!-- Экран выбора предмета -->
         <div class="screen subject-select-screen active" id="subjectSelectScreen">
-            <div class="subject-select-header">
-                <h1>🎓 ЕГЭ Аркада</h1>
-                <p>Выберите предмет</p>
-            </div>
-            <div class="subject-buttons">
-                <button class="subject-btn" onclick="selectSubject('russian')">
-                    <div class="subject-icon">📚</div>
-                    <div>Русский язык</div>
-                    <div class="subject-description">Подготовка к ЕГЭ по русскому языку</div>
-                </button>
-            </div>
+            <h1>Выберите предмет</h1>
+            <button class="subject-btn" onclick="selectSubject('russian')">Русский язык</button>
         </div>
 
         <!-- Экран меню русского языка -->
         <div class="screen russian-menu-screen" id="russianMenuScreen">
             <div class="russian-menu-header">
-                <h1>📚 Русский язык</h1>
+                <h1>Русский язык</h1>
                 <p>Выберите раздел для изучения</p>
             </div>
             <div class="russian-menu-content">
                 <div class="side-buttons left">
                     <button class="side-btn" onclick="selectTopic('orthography')">
-                        <div class="side-btn-icon">📝</div>
                         <div>Орфография</div>
                     </button>
                     <button class="side-btn" onclick="selectTopic('punctuation')">
-                        <div class="side-btn-icon">✏️</div>
                         <div>Пунктуация</div>
                     </button>
                     <button class="side-btn" onclick="selectTopic('text-task')">
-                        <div class="side-btn-icon">📄</div>
                         <div>Задание с текстом</div>
                     </button>
                 </div>
                 <div class="center-path-area">
-                    <div class="center-path"></div>
+                    <div></div>
                 </div>
                 <div class="side-buttons right">
                     <button class="side-btn" onclick="selectTopic('lexics')">
-                        <div class="side-btn-icon">📖</div>
                         <div>Лексика и фразеология</div>
                     </button>
                     <button class="side-btn" onclick="selectTopic('language-norms')">
-                        <div class="side-btn-icon">📚</div>
                         <div>Языковые нормы</div>
                     </button>
                 </div>
             </div>
             <div class="play-button-container">
-                <button class="play-main-btn" onclick="goToArcade()">
-                    🎮 Играть
-                </button>
+                <button class="play-main-btn" onclick="goToArcade()">Играть</button>
             </div>
         </div>
 
         <!-- Экран выбора уровней -->
         <div class="screen level-select-screen" id="levelSelectScreen">
             <div class="path-container">
-                <div class="path-line"></div>
                 <div class="levels-list" id="levelsList"></div>
                 <div class="start-label">НАЧАТЬ</div>
             </div>
@@ -1358,7 +678,7 @@
         <div class="screen game-screen" id="gameScreen">
             <button class="back-btn" onclick="backToRussianMenu()">← Назад</button>
             <div class="header">
-                <h1 id="levelTitle">🎮 ЕГЭ Аркада</h1>
+                <h1 id="levelTitle">ЕГЭ Аркада</h1>
                 <div class="stats">
                     <div class="stat-item">
                         <span>Очки</span>
@@ -1386,12 +706,12 @@
             </div>
 
             <div class="level-complete" id="levelComplete">
-                <h2>🎉 Уровень пройден!</h2>
+                <h2>Уровень пройден!</h2>
                 <div class="final-stats">
-                    <p>🏆 Очки: <span id="finalScore">0</span></p>
-                    <p>✅ Правильных: <span id="finalCorrect">0</span>/<span id="finalTotal">0</span></p>
-                    <p>📈 Точность: <span id="finalAccuracy">0</span>%</p>
-                    <p>⭐ Звезды: <span id="finalStars">0</span></p>
+                    <p>Очки: <span id="finalScore">0</span></p>
+                    <p>Правильных: <span id="finalCorrect">0</span>/<span id="finalTotal">0</span></p>
+                    <p>Точность: <span id="finalAccuracy">0</span>%</p>
+                    <p>Звезды: <span id="finalStars">0</span></p>
                 </div>
                 <button class="btn" onclick="backToRussianMenu()">К меню</button>
                 <button class="btn btn-secondary" onclick="restartLevel()">Повторить уровень</button>
@@ -1403,50 +723,48 @@
             <div class="bottom-nav-item active" onclick="switchBottomNav('game')" data-nav="game">
                 <div class="bottom-nav-icon">🎮</div>
                 <div class="bottom-nav-text">Игра</div>
-                    </div>
+            </div>
             <div class="bottom-nav-item" onclick="switchBottomNav('settings')" data-nav="settings">
                 <div class="bottom-nav-icon">⚙️</div>
                 <div class="bottom-nav-text">Настройки</div>
-                </div>
             </div>
+        </div>
 
         <!-- Экран настроек -->
         <div class="screen settings-screen" id="settingsScreen">
             <div class="settings-content">
-                <h2>⚙️ Настройки</h2>
+                <h2>Настройки</h2>
                 
                 <div class="settings-section">
-                    <h3>📊 Статистика</h3>
+                    <h3>Статистика</h3>
                     <div id="settingsStats" class="settings-stats"></div>
-            </div>
+                </div>
 
                 <div class="settings-section">
-                    <h3>🎯 Действия</h3>
+                    <h3>Действия</h3>
                     <button class="settings-btn" onclick="clearProgress()">
-                        🗑️ Очистить прогресс
+                        Очистить прогресс
                     </button>
                     <button class="settings-btn" onclick="exportProgress()">
-                        💾 Экспорт прогресса
+                        Экспорт прогресса
                     </button>
                 </div>
 
                 <div class="settings-section">
-                    <h3>ℹ️ О приложении</h3>
-                    <p style="color: #e2e8f0; font-size: 14px; line-height: 1.6;">
+                    <h3>О приложении</h3>
+                    <p>
                         ЕГЭ Аркада - интерактивная игра для подготовки к ЕГЭ по русскому языку.<br>
                         Проходите уровни, изучайте правила и улучшайте свои результаты!
                     </p>
+                </div>
             </div>
         </div>
-        </div>
-
     </div>
 
     <script>
         // Инициализация Telegram WebApp
         let tg = window.Telegram?.WebApp;
 
-        // Уровни с вопросами
         // Текущая категория
         let currentCategory = 'arcade';
 
@@ -1459,79 +777,24 @@
                 explanation: {
                     title: "Ударение в глаголах прошедшего времени женского рода",
                     content: `
-                        <h3>📚 Основное правило</h3>
+                        <h3>Основное правило</h3>
                         <p>В глаголах прошедшего времени женского рода ударение, как правило, падает на окончание <strong>А</strong>.</p>
                         
-                        <div class="example">
-                            <div class="example-title">✅ Примеры:</div>
-                            <div class="explanation-words">
-                                <span class="explanation-word">брал<span class="accent">А</span></span>
-                                <span class="explanation-word">брал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">взял<span class="accent">А</span></span>
-                                <span class="explanation-word">взял<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">влил<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">ворвал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">воспринял<span class="accent">А</span></span>
-                                <span class="explanation-word">воссоздал<span class="accent">А</span></span>
-                                <span class="explanation-word">гнал<span class="accent">А</span></span>
-                                <span class="explanation-word">гнал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">добрал<span class="accent">А</span></span>
-                                <span class="explanation-word">добрал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">дождал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">ждал<span class="accent">А</span></span>
-                                <span class="explanation-word">занял<span class="accent">А</span></span>
-                                <span class="explanation-word">заперл<span class="accent">А</span></span>
-                                <span class="explanation-word">заперл<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">звал<span class="accent">А</span></span>
-                                <span class="explanation-word">лгал<span class="accent">А</span></span>
-                                <span class="explanation-word">лил<span class="accent">А</span></span>
-                                <span class="explanation-word">лил<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">наврал<span class="accent">А</span></span>
-                                <span class="explanation-word">надорвал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">назвал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">налил<span class="accent">А</span></span>
-                                <span class="explanation-word">нарвал<span class="accent">А</span></span>
-                                <span class="explanation-word">начал<span class="accent">А</span></span>
-                                <span class="explanation-word">облил<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">обнял<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">обогнал<span class="accent">А</span></span>
-                                <span class="explanation-word">ободрал<span class="accent">А</span></span>
-                                <span class="explanation-word">отбыл<span class="accent">А</span></span>
-                                <span class="explanation-word">отдал<span class="accent">А</span></span>
-                                <span class="explanation-word">отозвал<span class="accent">А</span></span>
-                                <span class="explanation-word">отозвал<span class="accent">А</span>сь</span>
-                                <span class="explanation-word">перелил<span class="accent">А</span></span>
-                                <span class="explanation-word">позвал<span class="accent">А</span></span>
-                                <span class="explanation-word">полил<span class="accent">А</span></span>
-                                <span class="explanation-word">понял<span class="accent">А</span></span>
-                                <span class="explanation-word">прибыл<span class="accent">А</span></span>
-                                <span class="explanation-word">рвал<span class="accent">А</span></span>
-                                <span class="explanation-word">снял<span class="accent">А</span></span>
-                                <span class="explanation-word">создал<span class="accent">А</span></span>
-                                <span class="explanation-word">сорвал<span class="accent">А</span></span>
-                                <span class="explanation-word">убрал<span class="accent">А</span></span>
-                            </div>
+                        <div>
+                            <div>Примеры:</div>
+                            <div>бралА, бралАсь, взялА, взялАсь, влилАсь, ворвалАсь, воспринялА, воссоздалА, гналА, гналАсь, добралА, добралАсь, дождалАсь, ждалА, занялА, заперлА, заперлАсь, звалА, лгалА, лилА, лилАсь, навралА, надорвалАсь, назвалАсь, налилА, нарвалА, началА, облилАсь, обнялАсь, обогналА, ободралА, отбылА, отдалА, отозвалА, отозвалАсь, перелилА, позвалА, полилА, понялА, прибылА, рвалА, снялА, создалА, сорвалА, убралА</div>
                         </div>
 
-                        <div class="exception">
-                            <div class="exception-title">⚠️ Исключение 1: Приставка ВЫ-</div>
+                        <div>
+                            <div>Исключение 1: Приставка ВЫ-</div>
                             <p>Исключение составляют глаголы прошедшего времени женского рода с приставкой <strong>ВЫ-</strong>, которая перетягивает ударение на себя:</p>
-                            <div class="explanation-words">
-                                <span class="explanation-word"><span class="accent">в</span>Ылила</span>
-                                <span class="explanation-word"><span class="accent">в</span>Ызвала</span>
-                            </div>
+                            <div>вЫлила, вЫзвала</div>
                         </div>
 
-                        <div class="exception">
-                            <div class="exception-title">⚠️ Исключение 2: Особые глаголы</div>
+                        <div>
+                            <div>Исключение 2: Особые глаголы</div>
                             <p>У глаголов <strong>класть, красться, слать, послать, отослать</strong> ударение в форме женского рода прошедшего времени <strong>НЕ</strong> падает на окончание А, а остаётся на основе:</p>
-                            <div class="explanation-words">
-                                <span class="explanation-word"><span class="accent">кл</span>Ала</span>
-                                <span class="explanation-word"><span class="accent">кр</span>Алась</span>
-                                <span class="explanation-word"><span class="accent">сл</span>Ала</span>
-                                <span class="explanation-word">пос<span class="accent">л</span>Ала</span>
-                                <span class="explanation-word">отос<span class="accent">л</span>Ала</span>
-                            </div>
+                            <div>клАла, крАлась, слАла, послАла, отослАла</div>
                         </div>
                     `
                 },
@@ -1805,10 +1068,8 @@
             if (typeof tg !== 'undefined' && tg) {
                 tg.ready();
                 tg.expand();
-                // Отключаем визуальные эффекты для лучшей производительности
                 tg.enableClosingConfirmation(false);
-                // Скрываем заголовок Telegram WebApp
-                tg.setHeaderColor('#1a1a2e');
+                tg.setHeaderColor('#ffffff');
                 tg.BackButton.hide();
             }
             
@@ -1894,7 +1155,7 @@
                 bottomNavbar: false,
                 withNavbar: true
             });
-                renderLevelSelect();
+            renderLevelSelect();
         }
 
         // Переключение нижней навигации
@@ -1957,7 +1218,6 @@
             });
         }
 
-
         // Рендеринг экрана выбора уровней
         function renderLevelSelect() {
             const levelsList = document.getElementById('levelsList');
@@ -1975,22 +1235,6 @@
             } else if (currentCategory === 'arcade') {
                 // Показываем все уровни
                 filteredLevels = levels;
-            }
-
-            // Заголовок удален, больше не обновляем
-
-            // Удаляем старые камни и персонажа
-            const oldStones = pathContainer.querySelectorAll('.path-stone');
-            oldStones.forEach(stone => stone.remove());
-            const oldPlayer = pathContainer.querySelector('.player-character');
-            if (oldPlayer) oldPlayer.remove();
-
-            // Находим последний пройденный уровень в отфильтрованном списке
-            let lastCompletedLevel = -1;
-            for (let i = 0; i < filteredLevels.length; i++) {
-                if (completedLevels[filteredLevels[i].id]) {
-                    lastCompletedLevel = i;
-                }
             }
 
             // Отображаем уровни в обычном порядке (column-reverse покажет их снизу вверх)
@@ -2032,124 +1276,11 @@
                 levelsList.appendChild(levelItem);
             });
 
-            // Добавляем камни на тропинку между уровнями
-            const levelItems = levelsList.querySelectorAll('.level-item');
-            levelItems.forEach((item, index) => {
-                if (index < levelItems.length - 1) {
-                    // Добавляем 2-3 камня между уровнями
-                    const stonesCount = 2 + Math.floor(Math.random() * 2);
-                    for (let i = 0; i < stonesCount; i++) {
-                        const stone = document.createElement('div');
-                        stone.className = 'path-stone';
-                        // Позиционируем камни между текущим и следующим уровнем
-                        const randomOffset = (Math.random() - 0.5) * 15;
-                        stone.style.left = `calc(50% + ${randomOffset}px)`;
-                        stone.style.top = `${30 + i * 15}px`;
-                        pathContainer.appendChild(stone);
-                    }
-
-                    // Добавляем декоративную траву по бокам
-                    if (Math.random() > 0.5) {
-                        const grassLeft = document.createElement('div');
-                        grassLeft.className = 'path-decoration grass-left';
-                        grassLeft.textContent = '🌿';
-                        grassLeft.style.top = `${20 + Math.random() * 20}px`;
-                        pathContainer.appendChild(grassLeft);
-
-                        const grassRight = document.createElement('div');
-                        grassRight.className = 'path-decoration grass-right';
-                        grassRight.textContent = '🌿';
-                        grassRight.style.top = `${20 + Math.random() * 20}px`;
-                        pathContainer.appendChild(grassRight);
-                    }
-                }
-            });
-
-            // Добавляем персонажа на тропинку
-            const playerChar = document.createElement('div');
-            playerChar.className = 'player-character';
-            playerChar.textContent = '🦉';
-            playerChar.title = 'Ваш прогресс';
-            pathContainer.appendChild(playerChar);
-
-            // Позиционируем персонажа на уровне последнего пройденного уровня
+            // Прокручиваем вниз (к первому уровню) при загрузке
             setTimeout(() => {
-                positionPlayerOnPath(lastCompletedLevel);
-                
-                // Прокручиваем к персонажу
                 const levelSelectScreen = document.getElementById('levelSelectScreen');
-                if (lastCompletedLevel >= 0 && lastCompletedLevel < levelItems.length) {
-                    // Учитываем обратный порядок отображения
-                    const visualIndex = levelItems.length - 1 - lastCompletedLevel;
-                    const targetLevel = levelItems[visualIndex];
-                    if (targetLevel) {
-                        // Ждем, пока элементы отрендерятся
-                        requestAnimationFrame(() => {
-                            const targetPosition = targetLevel.offsetTop - levelSelectScreen.clientHeight / 2 + targetLevel.offsetHeight / 2;
-                            levelSelectScreen.scrollTo({
-                                top: Math.max(0, targetPosition),
-                                behavior: 'smooth'
-                            });
-                        });
-                    }
-                } else {
-                    // Если нет пройденных уровней, прокручиваем вниз
-                    setTimeout(() => {
                 levelSelectScreen.scrollTop = levelSelectScreen.scrollHeight;
-                    }, 50);
-                }
-            }, 150);
-        }
-
-        // Позиционирование персонажа на тропинке
-        function positionPlayerOnPath(levelIndex) {
-            const playerChar = document.querySelector('.player-character');
-            const levelsList = document.getElementById('levelsList');
-            const levelItems = levelsList.querySelectorAll('.level-item');
-            
-            if (!playerChar || levelItems.length === 0) return;
-
-            // Если нет пройденных уровней, ставим персонажа внизу (начало тропинки)
-            if (levelIndex < 0) {
-                playerChar.style.top = 'auto';
-                playerChar.style.bottom = '20px';
-                playerChar.style.animation = 'float 3s ease-in-out infinite';
-                playerChar.classList.remove('walking');
-                return;
-            }
-
-            // Учитываем, что уровни отображаются в обратном порядке (column-reverse)
-            // Поэтому последний уровень в массиве - это первый визуально (внизу)
-            const visualIndex = levelItems.length - 1 - levelIndex;
-            const targetLevel = levelItems[visualIndex];
-            
-            if (!targetLevel) {
-                playerChar.style.top = 'auto';
-                playerChar.style.bottom = '20px';
-                playerChar.style.animation = 'float 3s ease-in-out infinite';
-                playerChar.classList.remove('walking');
-                return;
-            }
-
-            // Используем offsetTop для позиционирования относительно levelsList
-            const levelsListRect = levelsList.getBoundingClientRect();
-            const levelRect = targetLevel.getBoundingClientRect();
-            
-            // Вычисляем позицию центра уровня относительно levelsList
-            const levelCenter = levelRect.top - levelsListRect.top + levelRect.height / 2;
-            
-            // Позиционируем персонажа на уровне центра выбранного уровня
-            // Добавляем отступ от верха levelsList
-            const pathContainer = document.querySelector('.path-container');
-            const pathContainerPadding = 40; // padding-top path-container
-            const topPosition = pathContainerPadding + levelCenter;
-            
-            playerChar.style.top = `${topPosition}px`;
-            playerChar.style.bottom = 'auto';
-            playerChar.style.animation = 'walk 0.6s ease-in-out infinite';
-            
-            // Добавляем класс для анимации ходьбы
-            playerChar.classList.add('walking');
+            }, 100);
         }
 
         // Запуск уровня
@@ -2183,7 +1314,7 @@
                 <h2>${level.explanation.title}</h2>
                 ${level.explanation.content}
                 <button class="start-practice-btn" onclick="startPractice()">
-                    🎯 Начать практику
+                    Начать практику
                 </button>
             `;
         }
@@ -2453,10 +1584,10 @@
             const maxStars = totalLevels * 3;
             
             statsDiv.innerHTML = `
-                <div>📊 Всего уровней: ${totalLevels}</div>
-                <div>✅ Пройдено: ${completedCount}</div>
-                <div>⭐ Звезд: ${totalStars}/${maxStars}</div>
-                <div>📈 Прогресс: ${Math.round((completedCount / totalLevels) * 100)}%</div>
+                <div>Всего уровней: ${totalLevels}</div>
+                <div>Пройдено: ${completedCount}</div>
+                <div>Звезд: ${totalStars}/${maxStars}</div>
+                <div>Прогресс: ${Math.round((completedCount / totalLevels) * 100)}%</div>
             `;
         }
 
@@ -2489,13 +1620,11 @@
             }
         }
 
-
         // Запуск при загрузке
         init();
     </script>
 </body>
 </html>
-
 
 
 
