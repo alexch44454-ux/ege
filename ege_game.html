@@ -90,46 +90,6 @@
             text-align: center;
         }
 
-        /* Нижняя панель навигации */
-        .bottom-navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            background: #f0f0f0;
-            border-top: 1px solid #ccc;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 5px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom, 0));
-        }
-
-        .bottom-nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 5px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .bottom-nav-item.active {
-            background: #ddd;
-        }
-
-        .bottom-nav-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-
-        .bottom-nav-text {
-            font-size: 11px;
-        }
 
         /* Экраны */
         .screen {
@@ -145,8 +105,7 @@
             display: block;
         }
         
-        .screen.active.subject-select-screen,
-        .screen.active.russian-menu-screen {
+        .screen.active.subject-select-screen {
             display: flex;
         }
 
@@ -154,9 +113,6 @@
             padding-top: 60px;
         }
 
-        .screen.with-bottom-nav {
-            padding-bottom: 60px;
-        }
 
         /* Экран выбора предмета */
         .subject-select-screen {
@@ -182,70 +138,6 @@
             background: #f0f0f0;
         }
 
-        /* Экран меню русского языка */
-        .russian-menu-screen {
-            padding: 20px;
-        }
-
-        .russian-menu-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .russian-menu-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 300px;
-            margin: 20px 0;
-        }
-
-        .side-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .side-btn {
-            padding: 15px 20px;
-            border: 1px solid #000;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .side-btn:hover {
-            background: #f0f0f0;
-        }
-
-        .center-path-area {
-            flex: 1;
-            height: 200px;
-            margin: 0 20px;
-            border: 1px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .play-button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .play-main-btn {
-            padding: 15px 40px;
-            font-size: 18px;
-            border: 2px solid #000;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .play-main-btn:hover {
-            background: #f0f0f0;
-        }
 
         /* Экран выбора уровней */
         .level-select-screen {
@@ -551,53 +443,6 @@
             display: none;
         }
 
-        /* Экран настроек */
-        .settings-screen {
-            padding: 20px;
-        }
-
-        .settings-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .settings-content h2 {
-            margin-bottom: 20px;
-        }
-
-        .settings-section {
-            margin-bottom: 30px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .settings-section h3 {
-            margin-bottom: 15px;
-        }
-
-        .settings-stats {
-            margin: 15px 0;
-        }
-
-        .settings-stats div {
-            margin: 10px 0;
-        }
-
-        .settings-btn {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border: 1px solid #000;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 4px;
-            text-align: left;
-        }
-
-        .settings-btn:hover {
-            background: #f0f0f0;
-        }
     </style>
 </head>
 <body>
@@ -626,45 +471,10 @@
             </div>
         </div>
 
-        <!-- Экран выбора предмета (скрыт, не используется) -->
-        <div class="screen subject-select-screen" id="subjectSelectScreen" style="display: none;">
+        <!-- Экран выбора предмета -->
+        <div class="screen subject-select-screen" id="subjectSelectScreen">
             <h1>Выберите предмет</h1>
             <button class="subject-btn" onclick="selectSubject('russian')">Русский язык</button>
-        </div>
-
-        <!-- Экран меню русского языка -->
-        <div class="screen russian-menu-screen" id="russianMenuScreen">
-            <div class="russian-menu-header">
-                <h1>Русский язык</h1>
-                <p>Выберите раздел для изучения</p>
-            </div>
-            <div class="russian-menu-content">
-                <div class="side-buttons left">
-                    <button class="side-btn" onclick="selectTopic('orthography')">
-                        <div>Орфография</div>
-                    </button>
-                    <button class="side-btn" onclick="selectTopic('punctuation')">
-                        <div>Пунктуация</div>
-                    </button>
-                    <button class="side-btn" onclick="selectTopic('text-task')">
-                        <div>Задание с текстом</div>
-                    </button>
-                </div>
-                <div class="center-path-area">
-                    <div></div>
-                </div>
-                <div class="side-buttons right">
-                    <button class="side-btn" onclick="selectTopic('lexics')">
-                        <div>Лексика и фразеология</div>
-                    </button>
-                    <button class="side-btn" onclick="selectTopic('language-norms')">
-                        <div>Языковые нормы</div>
-                    </button>
-                </div>
-            </div>
-            <div class="play-button-container">
-                <button class="play-main-btn" onclick="goToArcade()">Играть</button>
-            </div>
         </div>
 
         <!-- Экран выбора уровней -->
@@ -677,13 +487,13 @@
 
         <!-- Экран объяснения -->
         <div class="screen explanation-screen" id="explanationScreen">
-            <button class="back-btn" onclick="backToRussianMenu()">← Назад</button>
+            <button class="back-btn" onclick="backToLevelSelect()">← Назад</button>
             <div class="explanation-content" id="explanationContent"></div>
         </div>
 
         <!-- Экран игры -->
         <div class="screen game-screen" id="gameScreen">
-            <button class="back-btn" onclick="backToRussianMenu()">← Назад</button>
+            <button class="back-btn" onclick="backToLevelSelect()">← Назад</button>
             <div class="header">
                 <h1 id="levelTitle">ЕГЭ Аркада</h1>
                 <div class="stats">
@@ -720,52 +530,11 @@
                     <p>Точность: <span id="finalAccuracy">0</span>%</p>
                     <p>Звезды: <span id="finalStars">0</span></p>
                 </div>
-                <button class="btn" onclick="backToRussianMenu()">К меню</button>
+                <button class="btn" onclick="backToLevelSelect()">К уровням</button>
                 <button class="btn btn-secondary" onclick="restartLevel()">Повторить уровень</button>
             </div>
         </div>
 
-        <!-- Нижняя навигация -->
-        <div class="bottom-navbar" id="bottomNavbar" style="display: none;">
-            <div class="bottom-nav-item active" onclick="switchBottomNav('game')" data-nav="game">
-                <div class="bottom-nav-icon">🎮</div>
-                <div class="bottom-nav-text">Игра</div>
-            </div>
-            <div class="bottom-nav-item" onclick="switchBottomNav('settings')" data-nav="settings">
-                <div class="bottom-nav-icon">⚙️</div>
-                <div class="bottom-nav-text">Настройки</div>
-            </div>
-        </div>
-
-        <!-- Экран настроек -->
-        <div class="screen settings-screen" id="settingsScreen">
-            <div class="settings-content">
-                <h2>Настройки</h2>
-                
-                <div class="settings-section">
-                    <h3>Статистика</h3>
-                    <div id="settingsStats" class="settings-stats"></div>
-                </div>
-
-                <div class="settings-section">
-                    <h3>Действия</h3>
-                    <button class="settings-btn" onclick="clearProgress()">
-                        Очистить прогресс
-                    </button>
-                    <button class="settings-btn" onclick="exportProgress()">
-                        Экспорт прогресса
-                    </button>
-                </div>
-
-                <div class="settings-section">
-                    <h3>О приложении</h3>
-                    <p>
-                        ЕГЭ Аркада - интерактивная игра для подготовки к ЕГЭ по русскому языку.<br>
-                        Проходите уровни, изучайте правила и улучшайте свои результаты!
-                    </p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -1037,19 +806,12 @@
             
             // Управление панелями навигации
             const topNavbar = document.getElementById('topNavbar');
-            const bottomNavbar = document.getElementById('bottomNavbar');
             
-            // По умолчанию скрываем обе панели
+            // По умолчанию скрываем панель
             if (options.topNavbar !== undefined) {
                 topNavbar.style.display = options.topNavbar ? 'flex' : 'none';
             } else {
                 topNavbar.style.display = 'none';
-            }
-            
-            if (options.bottomNavbar !== undefined) {
-                bottomNavbar.style.display = options.bottomNavbar ? 'flex' : 'none';
-            } else {
-                bottomNavbar.style.display = 'none';
             }
             
             // Показываем нужный экран
@@ -1060,9 +822,6 @@
                 // Добавляем дополнительные классы если нужно
                 if (options.withNavbar) {
                     targetScreen.classList.add('with-navbar');
-                }
-                if (options.withBottomNav) {
-                    targetScreen.classList.add('with-bottom-nav');
                 }
             } else {
                 console.error('Экран не найден:', screenId);
@@ -1085,15 +844,15 @@
                 screen.classList.remove('active');
             });
             
-            // Сразу открываем аркаду (минуя выбор предмета)
-            currentCategory = 'arcade';
-            updateNavbar();
-            showScreen('levelSelectScreen', {
-                topNavbar: true,
-                bottomNavbar: false,
-                withNavbar: true
-            });
-            renderLevelSelect();
+            // Показываем экран выбора предмета
+            const subjectScreen = document.getElementById('subjectSelectScreen');
+            if (subjectScreen) {
+                subjectScreen.classList.add('active');
+            }
+            
+            // Скрываем панели навигации
+            const topNavbar = document.getElementById('topNavbar');
+            if (topNavbar) topNavbar.style.display = 'none';
             
             // Загружаем прогресс
             loadProgressFromServer();
@@ -1147,62 +906,15 @@
         // Выбор предмета
         function selectSubject(subject) {
             if (subject === 'russian') {
-                showScreen('russianMenuScreen', {
-                    topNavbar: false,
-                    bottomNavbar: true,
-                    withBottomNav: true
+                // Сразу открываем аркаду
+                currentCategory = 'arcade';
+                updateNavbar();
+                showScreen('levelSelectScreen', {
+                    topNavbar: true,
+                    withNavbar: true
                 });
-                updateBottomNav('game');
+                renderLevelSelect();
             }
-        }
-
-        // Выбор темы (пока заглушка)
-        function selectTopic(topic) {
-            console.log('Выбрана тема:', topic);
-            // Позже здесь будет логика перехода к конкретной теме
-        }
-
-        // Переход в аркаду
-        function goToArcade() {
-            currentCategory = 'arcade';
-            updateNavbar();
-            showScreen('levelSelectScreen', {
-                topNavbar: true,
-                bottomNavbar: false,
-                withNavbar: true
-            });
-            renderLevelSelect();
-        }
-
-        // Переключение нижней навигации
-        function switchBottomNav(nav) {
-            updateBottomNav(nav);
-            
-            if (nav === 'settings') {
-                showScreen('settingsScreen', {
-                    topNavbar: false,
-                    bottomNavbar: true,
-                    withBottomNav: true
-                });
-                updateSettingsStats();
-            } else if (nav === 'game') {
-                // Возвращаемся в главное меню русского языка
-                showScreen('russianMenuScreen', {
-                    topNavbar: false,
-                    bottomNavbar: true,
-                    withBottomNav: true
-                });
-            }
-        }
-
-        // Обновление активного элемента нижней навигации
-        function updateBottomNav(nav) {
-            document.querySelectorAll('.bottom-nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.dataset.nav === nav) {
-                    item.classList.add('active');
-                }
-            });
         }
 
         // Переключение категории (из верхней панели в аркаде)
@@ -1210,18 +922,12 @@
             currentCategory = category;
             updateNavbar();
             
-            if (category === 'settings') {
-                // Переход в настройки из аркады - возвращаемся в меню русского языка
-                switchBottomNav('settings');
-            } else {
-                // Остаемся в аркаде, просто меняем категорию
-                showScreen('levelSelectScreen', {
-                    topNavbar: true,
-                    bottomNavbar: false,
-                    withNavbar: true
-                });
-                renderLevelSelect();
-            }
+            // Остаемся в аркаде, просто меняем категорию
+            showScreen('levelSelectScreen', {
+                topNavbar: true,
+                withNavbar: true
+            });
+            renderLevelSelect();
         }
 
         // Обновление активного элемента навигации
@@ -1321,8 +1027,7 @@
         // Показать объяснение
         function showExplanation(level) {
             showScreen('explanationScreen', {
-                topNavbar: false,
-                bottomNavbar: false
+                topNavbar: false
             });
 
             const explanationContent = document.getElementById('explanationContent');
@@ -1338,8 +1043,7 @@
         // Начать практику (после объяснения)
         function startPractice() {
             showScreen('gameScreen', {
-                topNavbar: false,
-                bottomNavbar: false
+                topNavbar: false
             });
             document.getElementById('levelTitle').textContent = currentLevel.title;
             document.getElementById('levelComplete').classList.remove('show');
@@ -1545,7 +1249,6 @@
 
             showScreen('levelSelectScreen', {
                 topNavbar: true,
-                bottomNavbar: false,
                 withNavbar: true
             });
             renderLevelSelect();
@@ -1565,69 +1268,10 @@
 
             // Показываем экран выбора предмета
             showScreen('subjectSelectScreen', {
-                topNavbar: false,
-                bottomNavbar: false
+                topNavbar: false
             });
         }
 
-        // Возврат к меню русского языка
-        function backToRussianMenu() {
-            // Останавливаем все интервалы
-            if (fallingWordsInterval) {
-                clearInterval(fallingWordsInterval);
-                fallingWordsInterval = null;
-            }
-            if (questionTimeout) {
-                clearTimeout(questionTimeout);
-                questionTimeout = null;
-            }
-
-            // Показываем меню русского языка
-            showScreen('russianMenuScreen', {
-                topNavbar: false,
-                bottomNavbar: true,
-                withBottomNav: true
-            });
-            updateBottomNav('game');
-        }
-
-        // Обновление статистики в настройках
-        function updateSettingsStats() {
-            const statsDiv = document.getElementById('settingsStats');
-            const totalLevels = levels.length;
-            const completedCount = Object.keys(completedLevels).length;
-            const totalStars = Object.values(completedLevels).reduce((sum, level) => sum + (level.stars || 0), 0);
-            const maxStars = totalLevels * 3;
-            
-            statsDiv.innerHTML = `
-                <div>Всего уровней: ${totalLevels}</div>
-                <div>Пройдено: ${completedCount}</div>
-                <div>Звезд: ${totalStars}/${maxStars}</div>
-                <div>Прогресс: ${Math.round((completedCount / totalLevels) * 100)}%</div>
-            `;
-        }
-
-        // Очистка прогресса
-        function clearProgress() {
-            if (confirm('Вы уверены, что хотите очистить весь прогресс? Это действие нельзя отменить.')) {
-                completedLevels = {};
-                localStorage.removeItem('completedLevels');
-                updateSettingsStats();
-                alert('Прогресс очищен!');
-            }
-        }
-
-        // Экспорт прогресса
-        function exportProgress() {
-            const progressJson = JSON.stringify(completedLevels, null, 2);
-            const blob = new Blob([progressJson], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'ege_progress.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
 
         // Повтор уровня
         function restartLevel() {
