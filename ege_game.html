@@ -142,6 +142,11 @@
         .screen.active {
             display: block;
         }
+        
+        .screen.active.subject-select-screen,
+        .screen.active.russian-menu-screen {
+            display: flex;
+        }
 
         .screen.with-navbar {
             padding-top: 60px;
@@ -1073,11 +1078,22 @@
                 tg.BackButton.hide();
             }
             
-            // Показываем только экран выбора предмета
-            showScreen('subjectSelectScreen', {
-                topNavbar: false,
-                bottomNavbar: false
+            // Убеждаемся, что все экраны скрыты
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
             });
+            
+            // Показываем только экран выбора предмета
+            const subjectScreen = document.getElementById('subjectSelectScreen');
+            if (subjectScreen) {
+                subjectScreen.classList.add('active');
+            }
+            
+            // Скрываем панели навигации
+            const topNavbar = document.getElementById('topNavbar');
+            const bottomNavbar = document.getElementById('bottomNavbar');
+            if (topNavbar) topNavbar.style.display = 'none';
+            if (bottomNavbar) bottomNavbar.style.display = 'none';
             
             // Загружаем прогресс
             loadProgressFromServer();
@@ -1621,7 +1637,11 @@
         }
 
         // Запуск при загрузке
-        init();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
