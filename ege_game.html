@@ -43,6 +43,8 @@
             right: 0;
             bottom: 0;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         /* Верхняя панель навигации */
@@ -624,8 +626,8 @@
             </div>
         </div>
 
-        <!-- Экран выбора предмета -->
-        <div class="screen subject-select-screen active" id="subjectSelectScreen">
+        <!-- Экран выбора предмета (скрыт, не используется) -->
+        <div class="screen subject-select-screen" id="subjectSelectScreen" style="display: none;">
             <h1>Выберите предмет</h1>
             <button class="subject-btn" onclick="selectSubject('russian')">Русский язык</button>
         </div>
@@ -1083,17 +1085,15 @@
                 screen.classList.remove('active');
             });
             
-            // Показываем только экран выбора предмета
-            const subjectScreen = document.getElementById('subjectSelectScreen');
-            if (subjectScreen) {
-                subjectScreen.classList.add('active');
-            }
-            
-            // Скрываем панели навигации
-            const topNavbar = document.getElementById('topNavbar');
-            const bottomNavbar = document.getElementById('bottomNavbar');
-            if (topNavbar) topNavbar.style.display = 'none';
-            if (bottomNavbar) bottomNavbar.style.display = 'none';
+            // Сразу открываем аркаду (минуя выбор предмета)
+            currentCategory = 'arcade';
+            updateNavbar();
+            showScreen('levelSelectScreen', {
+                topNavbar: true,
+                bottomNavbar: false,
+                withNavbar: true
+            });
+            renderLevelSelect();
             
             // Загружаем прогресс
             loadProgressFromServer();
