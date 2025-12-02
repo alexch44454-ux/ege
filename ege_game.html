@@ -635,6 +635,136 @@
             background: #1976D2;
         }
 
+        /* Кнопка добавления задания */
+        .add-level-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .add-level-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.6);
+        }
+
+        /* Модальное окно */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #48bb78;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 200px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
         .progress-bar {
             height: 5px;
             background: rgba(255, 255, 255, 0.3);
@@ -1223,6 +1353,37 @@
             <div class="path-container">
                 <div class="path-line"></div>
                 <div class="levels-list" id="levelsList"></div>
+                <button class="add-level-btn" id="addLevelBtn" onclick="showAddLevelModal()" style="display: none;">
+                    ➕ Добавить задание
+                </button>
+            </div>
+        </div>
+
+        <!-- Модальное окно для добавления задания -->
+        <div class="modal-overlay" id="addLevelModal" style="display: none;" onclick="if(event.target === this) closeAddLevelModal()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>➕ Добавить новое задание</h2>
+                    <button class="modal-close" onclick="closeAddLevelModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Название задания:</label>
+                        <input type="text" id="levelTitleInput" placeholder="Например: Ударение в глаголах" />
+                    </div>
+                    <div class="form-group">
+                        <label>Описание:</label>
+                        <input type="text" id="levelDescriptionInput" placeholder="Краткое описание задания" />
+                    </div>
+                    <div class="form-group">
+                        <label>Вопросы (каждый вопрос на новой строке, формат: Вопрос|Ответ1|Ответ2|Ответ3|Ответ4|НомерПравильного):</label>
+                        <textarea id="levelQuestionsInput" rows="10" placeholder="Вопрос 1?|Вариант 1|Вариант 2|Вариант 3|Вариант 4|1&#10;Вопрос 2?|Вариант 1|Вариант 2|Вариант 3|Вариант 4|2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" onclick="closeAddLevelModal()">Отмена</button>
+                        <button class="btn" onclick="saveCustomLevel()">Сохранить</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1437,42 +1598,187 @@
             },
             {
                 id: 2,
-                title: "Уровень 2: Пунктуация",
-                description: "Знаки препинания",
-                category: 'punctuation',
+                title: "Блок 2: Ударение (часть 2)",
+                description: "Ударение в причастиях и глаголах на -ИТЬ",
+                category: 'orthography',
+                explanation: {
+                    title: "Ударение в причастиях и глаголах на -ИТЬ",
+                    content: `
+                        <h3>📚 Правило 1: Краткие страдательные причастия</h3>
+                        <p>В кратких страдательных причастиях прошедшего времени женского рода ударение падает на окончание <strong>А</strong>:</p>
+                        <div class="example">
+                            <div class="example-title">✅ Примеры:</div>
+                            <div class="explanation-words">
+                                <span class="explanation-word">занят<span class="accent">А</span></span>
+                                <span class="explanation-word">заперт<span class="accent">А</span></span>
+                                <span class="explanation-word">заселен<span class="accent">А</span></span>
+                                <span class="explanation-word">нажит<span class="accent">А</span></span>
+                                <span class="explanation-word">налит<span class="accent">А</span></span>
+                                <span class="explanation-word">ободрен<span class="accent">А</span></span>
+                                <span class="explanation-word">снят<span class="accent">А</span></span>
+                                <span class="explanation-word">создан<span class="accent">А</span></span>
+                            </div>
+                        </div>
+
+                        <h3>📚 Правило 2: Глаголы на -ИТЬ</h3>
+                        <p>В глаголах, оканчивающихся на <strong>-ИТЬ</strong>, при спряжении ударение падает на окончание <strong>-ИШЬ, -ИТ, -ИМ, -ИТЕ, -АТ, -ЯТ</strong>:</p>
+                        <div class="example">
+                            <div class="example-title">✅ Примеры:</div>
+                            <div class="explanation-words">
+                                <span class="explanation-word">включить – включ<span class="accent">И</span>шь, включ<span class="accent">И</span>т, включ<span class="accent">И</span>м, включ<span class="accent">И</span>те, включ<span class="accent">А</span>т</span>
+                                <span class="explanation-word">вручить – вруч<span class="accent">И</span>шь, вруч<span class="accent">И</span>т, вруч<span class="accent">И</span>м, вруч<span class="accent">И</span>те, вруч<span class="accent">А</span>т</span>
+                                <span class="explanation-word">дозвониться – дозвон<span class="accent">И</span>шься, дозвон<span class="accent">И</span>тся, дозвон<span class="accent">И</span>мся, дозвон<span class="accent">И</span>тесь, дозвон<span class="accent">Я</span>тся</span>
+                                <span class="explanation-word">кровоточ<span class="accent">И</span>ть – рана кровоточ<span class="accent">И</span>т</span>
+                                <span class="explanation-word">исключить – исключ<span class="accent">И</span>шь, исключ<span class="accent">И</span>т, исключ<span class="accent">И</span>м, исключ<span class="accent">И</span>те, исключ<span class="accent">А</span>т</span>
+                                <span class="explanation-word">звонить – звон<span class="accent">И</span>шь, звон<span class="accent">И</span>т, звон<span class="accent">И</span>м, звон<span class="accent">И</span>те, звон<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">наделить – надел<span class="accent">И</span>шь, надел<span class="accent">И</span>т, надел<span class="accent">И</span>м, надел<span class="accent">И</span>те, надел<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">накрениться – ветер накрен<span class="accent">И</span>т судно</span>
+                                <span class="explanation-word">насорить – насор<span class="accent">И</span>шь, насор<span class="accent">И</span>т, насор<span class="accent">И</span>м, насор<span class="accent">И</span>те, насор<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">обзвонить – обзвон<span class="accent">И</span>шь, обзвон<span class="accent">И</span>т, обзвон<span class="accent">И</span>м, обзвон<span class="accent">И</span>те, обзвон<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">облегчить – облегч<span class="accent">И</span>шь, облегч<span class="accent">И</span>т, облегч<span class="accent">И</span>м, облегч<span class="accent">И</span>те, облегч<span class="accent">А</span>т</span>
+                                <span class="explanation-word">ободрить – ободр<span class="accent">И</span>шь, ободр<span class="accent">И</span>т, ободр<span class="accent">И</span>м, ободр<span class="accent">И</span>те, ободр<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">ободриться – ты ободр<span class="accent">И</span>шься</span>
+                                <span class="explanation-word">одолжить – одолж<span class="accent">И</span>шь, одолж<span class="accent">И</span>т, одолж<span class="accent">И</span>м, одолж<span class="accent">И</span>те, одолж<span class="accent">А</span>т</span>
+                                <span class="explanation-word">окружить – окруж<span class="accent">И</span>шь, окруж<span class="accent">И</span>т, окруж<span class="accent">И</span>м, окруж<span class="accent">И</span>те, окруж<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">повторить – повтор<span class="accent">И</span>шь, повтор<span class="accent">И</span>т, повтор<span class="accent">И</span>м, повтор<span class="accent">И</span>те, повтор<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">перезвонить – перезвон<span class="accent">И</span>шь, перезвон<span class="accent">И</span>т, перезвон<span class="accent">И</span>м, перезвон<span class="accent">И</span>те, перезвон<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">позвонить – позвон<span class="accent">И</span>шь, позвон<span class="accent">И</span>т, позвон<span class="accent">И</span>м, позвон<span class="accent">И</span>те, позвон<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">сверлить – сверл<span class="accent">И</span>шь, сверл<span class="accent">И</span>т, сверл<span class="accent">И</span>м, сверл<span class="accent">И</span>те, сверл<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">укрепить – укреп<span class="accent">И</span>шь, укреп<span class="accent">И</span>т, укреп<span class="accent">И</span>м, укреп<span class="accent">И</span>те, укреп<span class="accent">Я</span>т</span>
+                                <span class="explanation-word">щемить – сердце щем<span class="accent">И</span>т</span>
+                            </div>
+                        </div>
+
+                        <div class="exception">
+                            <div class="exception-title">⚠️ Исключение: Глаголы на -ИТЬ без ударения на окончание</div>
+                            <p>В следующих глаголах, оканчивающихся на <strong>-ИТЬ</strong>, при спряжении ударение <strong>НЕ</strong> падает на окончание:</p>
+                            <div class="explanation-words">
+                                <span class="explanation-word">оп<span class="accent">О</span>шлить (= сделать п<span class="accent">О</span>шлым) – они оп<span class="accent">О</span>шлят</span>
+                                <span class="explanation-word">осв<span class="accent">Е</span>домиться – ты осв<span class="accent">Е</span>домишься</span>
+                            </div>
+                        </div>
+
+                        <h3>📚 Правило 3: Глаголы от прилагательных</h3>
+                        <p>В глаголах, образованных от имён прилагательных, ударение чаще всего падает на <strong>-ИТЬ</strong>:</p>
+                        <div class="example">
+                            <div class="example-title">✅ Примеры:</div>
+                            <div class="explanation-words">
+                                <span class="explanation-word">быстрый – убыстр<span class="accent">И</span>ть</span>
+                                <span class="explanation-word">острый – обостр<span class="accent">И</span>ть</span>
+                                <span class="explanation-word">лёгкий – облегч<span class="accent">И</span>ть</span>
+                                <span class="explanation-word">бодрый – ободр<span class="accent">И</span>ть</span>
+                                <span class="explanation-word">глубокий – углуб<span class="accent">И</span>ть</span>
+                            </div>
+                        </div>
+
+                        <div class="exception">
+                            <div class="exception-title">⚠️ Исключение: Глагол от прилагательного</div>
+                            <p>Этой закономерности не подчиняется глагол <strong>озл<span class="accent">О</span>бить</strong>, образованный от имени прилагательного «злой».</p>
+                        </div>
+                    `
+                },
                 questions: [
                     {
-                        question: "Укажите предложение с пунктуационной ошибкой:",
-                        answers: [
-                            "Солнце, которое светило ярко, согревало землю.",
-                            "Он пришел, но она уже ушла.",
-                            "В лесу, где мы гуляли, было тихо.",
-                            "Я не знаю, что делать."
-                        ],
-                        correct: 0,
-                        explanation: "В первом предложении запятая перед 'которое' не нужна"
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["зАнята", "занЯта", "занятА", "зАнятА"],
+                        correct: 2,
+                        explanation: "Правильно: занятА - в кратких страдательных причастиях женского рода ударение на окончание А"
                     },
                     {
-                        question: "В каком предложении нужно поставить тире?",
-                        answers: [
-                            "Москва столица России.",
-                            "Москва это столица России.",
-                            "Москва была столицей России.",
-                            "Москва стала столицей России."
-                        ],
-                        correct: 0,
-                        explanation: "Тире ставится между подлежащим и сказуемым, выраженными существительными"
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["зАперта", "запЕрта", "запертА", "зАпертА"],
+                        correct: 2,
+                        explanation: "Правильно: запертА - в кратких страдательных причастиях женского рода ударение на окончание А"
                     },
                     {
-                        question: "Где нужна запятая?",
-                        answers: [
-                            "Он пришел(,) но она ушла.",
-                            "Он пришел но(,) она ушла.",
-                            "Он пришел но она(,) ушла.",
-                            "Запятая не нужна"
-                        ],
+                        question: "В каком слове ударение падает на окончание А?",
+                        answers: ["сОздана", "создАна", "созданА", "сОзданА"],
+                        correct: 2,
+                        explanation: "Правильно: созданА - в кратких страдательных причастиях женского рода ударение на окончание А"
+                    },
+                    {
+                        question: "Как правильно произнести: ты ... (звонить)?",
+                        answers: ["звОнишь", "звонИшь", "звОнИшь", "звонИшЬ"],
+                        correct: 1,
+                        explanation: "Правильно: звонИшь - в глаголах на -ИТЬ ударение на окончание -ИШЬ"
+                    },
+                    {
+                        question: "Как правильно произнести: он ... (звонить)?",
+                        answers: ["звОнит", "звонИт", "звОнИт", "звонИт"],
+                        correct: 1,
+                        explanation: "Правильно: звонИт - в глаголах на -ИТЬ ударение на окончание -ИТ"
+                    },
+                    {
+                        question: "Как правильно произнести: они ... (звонить)?",
+                        answers: ["звОнят", "звонЯт", "звОнЯт", "звонЯт"],
+                        correct: 1,
+                        explanation: "Правильно: звонЯт - в глаголах на -ИТЬ ударение на окончание -ЯТ"
+                    },
+                    {
+                        question: "Как правильно произнести: ты ... (включить)?",
+                        answers: ["включИшь", "вклЮчишь", "включИшЬ", "вклЮчИшь"],
                         correct: 0,
-                        explanation: "Запятая ставится перед союзом 'но'"
+                        explanation: "Правильно: включИшь - в глаголах на -ИТЬ ударение на окончание -ИШЬ"
+                    },
+                    {
+                        question: "Как правильно произнести: он ... (облегчить)?",
+                        answers: ["облегчИт", "облЕгчит", "облегчИт", "облЕгчИт"],
+                        correct: 0,
+                        explanation: "Правильно: облегчИт - в глаголах на -ИТЬ ударение на окончание -ИТ"
+                    },
+                    {
+                        question: "Как правильно произнести: они ... (облегчить)?",
+                        answers: ["облегчАт", "облЕгчат", "облегчАт", "облЕгчАт"],
+                        correct: 0,
+                        explanation: "Правильно: облегчАт - в глаголах на -ИТЬ ударение на окончание -АТ"
+                    },
+                    {
+                        question: "Как правильно произнести: ты ... (окружить)?",
+                        answers: ["окружИшь", "окрУжишь", "окружИшЬ", "окрУжИшь"],
+                        correct: 0,
+                        explanation: "Правильно: окружИшь - в глаголах на -ИТЬ ударение на окончание -ИШЬ"
+                    },
+                    {
+                        question: "Как правильно произнести: он ... (повторить)?",
+                        answers: ["повторИт", "повтОрит", "повторИт", "повтОрИт"],
+                        correct: 0,
+                        explanation: "Правильно: повторИт - в глаголах на -ИТЬ ударение на окончание -ИТ"
+                    },
+                    {
+                        question: "Как правильно произнести: они ... (повторить)?",
+                        answers: ["повторЯт", "повтОрят", "повторЯт", "повтОрЯт"],
+                        correct: 0,
+                        explanation: "Правильно: повторЯт - в глаголах на -ИТЬ ударение на окончание -ЯТ"
+                    },
+                    {
+                        question: "Как правильно произнести: ты ... (осведомиться)?",
+                        answers: ["освЕдомишься", "осведомИшься", "освЕдомИшься", "осведомИшЬся"],
+                        correct: 0,
+                        explanation: "Правильно: освЕдомишься - исключение, ударение НЕ на окончание"
+                    },
+                    {
+                        question: "Как правильно произнести: они ... (опошлить)?",
+                        answers: ["опОшлят", "опошлЯт", "опОшлЯт", "опошлЯт"],
+                        correct: 0,
+                        explanation: "Правильно: опОшлят - исключение, ударение НЕ на окончание"
+                    },
+                    {
+                        question: "Как правильно произнести: убыстрИть (от 'быстрый')?",
+                        answers: ["убыстрИть", "убыстрИть", "убыстрИть", "убыстрИть"],
+                        correct: 0,
+                        explanation: "Правильно: убыстрИть - в глаголах от прилагательных ударение на -ИТЬ"
+                    },
+                    {
+                        question: "Как правильно произнести: обострИть (от 'острый')?",
+                        answers: ["обострИть", "обострИть", "обострИть", "обострИть"],
+                        correct: 0,
+                        explanation: "Правильно: обострИть - в глаголах от прилагательных ударение на -ИТЬ"
+                    },
+                    {
+                        question: "Как правильно произнести: озлОбить (от 'злой')?",
+                        answers: ["озлОбить", "озлобИть", "озлОбИть", "озлобИть"],
+                        correct: 0,
+                        explanation: "Правильно: озлОбить - исключение, ударение НЕ на -ИТЬ"
                     }
                 ]
             },
@@ -1703,6 +2009,10 @@
                     withNavbar: true
                 });
                 renderLevelSelect();
+                
+                // Скрываем кнопку "Добавить задание" для аркады
+                const addLevelBtn = document.getElementById('addLevelBtn');
+                addLevelBtn.style.display = 'none';
             }
         }
 
@@ -1712,11 +2022,19 @@
             updateNavbar();
             
             // Остаемся в аркаде, просто меняем категорию
-                showScreen('levelSelectScreen', {
-                    topNavbar: true,
-                    withNavbar: true
-                });
+            showScreen('levelSelectScreen', {
+                topNavbar: true,
+                withNavbar: true
+            });
             renderLevelSelect();
+            
+            // Показываем кнопку "Добавить задание" только для категорий, где можно добавлять задания
+            const addLevelBtn = document.getElementById('addLevelBtn');
+            if (['orthography', 'punctuation', 'grammar'].includes(category)) {
+                addLevelBtn.style.display = 'block';
+            } else {
+                addLevelBtn.style.display = 'none';
+            }
         }
 
         // Обновление активного элемента навигации
@@ -1730,6 +2048,19 @@
         }
 
 
+        // Загрузка пользовательских заданий из localStorage
+        function getCustomLevels(category) {
+            const key = `customLevels_${category}`;
+            const stored = localStorage.getItem(key);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Сохранение пользовательских заданий в localStorage
+        function saveCustomLevels(category, customLevels) {
+            const key = `customLevels_${category}`;
+            localStorage.setItem(key, JSON.stringify(customLevels));
+        }
+
         // Рендеринг экрана выбора уровней
         function renderLevelSelect() {
             const levelsList = document.getElementById('levelsList');
@@ -1737,15 +2068,13 @@
             levelsList.innerHTML = '';
 
             // Фильтруем уровни по категории
-            let filteredLevels = levels;
-            if (currentCategory === 'orthography') {
-                filteredLevels = levels.filter(l => l.category === 'orthography');
-            } else if (currentCategory === 'punctuation') {
-                filteredLevels = levels.filter(l => l.category === 'punctuation');
-            } else if (currentCategory === 'grammar') {
-                filteredLevels = levels.filter(l => l.category === 'grammar');
+            let filteredLevels = [];
+            
+            // Для категорий orthography, punctuation, grammar показываем только пользовательские задания
+            if (['orthography', 'punctuation', 'grammar'].includes(currentCategory)) {
+                filteredLevels = getCustomLevels(currentCategory);
             } else if (currentCategory === 'arcade') {
-                // Показываем все уровни
+                // Показываем все уровни из аркады
                 filteredLevels = levels;
             }
 
@@ -1782,9 +2111,14 @@
                     levelNode.onclick = () => startLevel(level);
                     levelNode.title = 'Пройден. Нажмите, чтобы пройти снова';
                 } else {
-                    // Непройденный уровень - показываем номер
+                    // Непройденный уровень - показываем номер или иконку
                     levelNode.classList.add('available');
+                    // Для пользовательских заданий показываем иконку, для обычных - номер
+                    if (level.id && level.id.toString().startsWith('custom_')) {
+                        levelNode.textContent = '📝';
+                    } else {
                     levelNode.textContent = level.id;
+                    }
                     levelNode.onclick = () => startLevel(level);
                     levelNode.title = 'Нажмите, чтобы начать';
                 }
@@ -2080,11 +2414,98 @@
                 questionTimeout = null;
             }
 
-                showScreen('levelSelectScreen', {
-                    topNavbar: true,
-                    withNavbar: true
-                });
+            showScreen('levelSelectScreen', {
+                topNavbar: true,
+                withNavbar: true
+            });
             renderLevelSelect();
+            
+            // Показываем кнопку "Добавить задание" если нужно
+            const addLevelBtn = document.getElementById('addLevelBtn');
+            if (['orthography', 'punctuation', 'grammar'].includes(currentCategory)) {
+                addLevelBtn.style.display = 'block';
+            } else {
+                addLevelBtn.style.display = 'none';
+            }
+        }
+
+        // Показать модальное окно для добавления задания
+        function showAddLevelModal() {
+            const modal = document.getElementById('addLevelModal');
+            modal.style.display = 'flex';
+            // Очищаем поля
+            document.getElementById('levelTitleInput').value = '';
+            document.getElementById('levelDescriptionInput').value = '';
+            document.getElementById('levelQuestionsInput').value = '';
+        }
+
+        // Закрыть модальное окно
+        function closeAddLevelModal() {
+            const modal = document.getElementById('addLevelModal');
+            modal.style.display = 'none';
+        }
+
+        // Сохранить новое задание
+        function saveCustomLevel() {
+            const title = document.getElementById('levelTitleInput').value.trim();
+            const description = document.getElementById('levelDescriptionInput').value.trim();
+            const questionsText = document.getElementById('levelQuestionsInput').value.trim();
+
+            if (!title || !description || !questionsText) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+
+            // Парсим вопросы
+            const questions = [];
+            const lines = questionsText.split('\n').filter(line => line.trim());
+            
+            for (const line of lines) {
+                const parts = line.split('|').map(p => p.trim());
+                if (parts.length !== 6) {
+                    alert(`Ошибка в формате вопроса: "${line}"\nОжидается формат: Вопрос|Ответ1|Ответ2|Ответ3|Ответ4|НомерПравильного`);
+                    return;
+                }
+
+                const correctIndex = parseInt(parts[5]) - 1;
+                if (isNaN(correctIndex) || correctIndex < 0 || correctIndex > 3) {
+                    alert(`Неправильный номер правильного ответа в вопросе: "${line}"\nНомер должен быть от 1 до 4`);
+                return;
+            }
+
+                questions.push({
+                    question: parts[0],
+                    answers: [parts[1], parts[2], parts[3], parts[4]],
+                    correct: correctIndex
+                });
+            }
+
+            if (questions.length === 0) {
+                alert('Добавьте хотя бы один вопрос');
+                return;
+            }
+
+            // Получаем существующие задания
+            const customLevels = getCustomLevels(currentCategory);
+            
+            // Создаем новое задание
+            const newLevel = {
+                id: `custom_${currentCategory}_${Date.now()}`,
+                title: title,
+                description: description,
+                category: currentCategory,
+                questions: questions
+            };
+
+            // Добавляем новое задание
+            customLevels.push(newLevel);
+            saveCustomLevels(currentCategory, customLevels);
+
+            // Закрываем модальное окно и обновляем список
+            closeAddLevelModal();
+            renderLevelSelect();
+            
+            alert('Задание успешно добавлено!');
         }
 
         // Возврат к выбору предмета
@@ -2119,9 +2540,6 @@
     </script>
 </body>
 </html>
-
-
-
 
 
 
