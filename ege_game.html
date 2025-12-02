@@ -2479,25 +2479,22 @@
             const q = currentLevel.questions[currentQuestion];
             const buttons = document.querySelectorAll('.answer-btn');
             
+            // Определяем правильный ответ
+            const correctAnswerIndex = q.correct;
+            
             buttons.forEach((btn, index) => {
                 btn.disabled = true;
-                if (index === q.correct) {
+                if (index === correctAnswerIndex) {
                     btn.classList.add('correct');
-                } else if (index === selectedIndex && index !== q.correct) {
+                } else if (index === selectedIndex && index !== correctAnswerIndex) {
                     btn.classList.add('wrong');
                 }
             });
 
             // Проверяем, нужно ли показать полное слово с объяснением (для вопросов с пропуском)
             const isWordWithGap = q.question.includes('_');
-            let fullWord = '';
-            if (isWordWithGap) {
-                // Заменяем пропуск на выбранную букву
-                const selectedLetter = selectedIndex >= 0 ? q.answers[selectedIndex] : '';
-                fullWord = q.question.replace('_', selectedLetter);
-            }
-
-            if (selectedIndex === q.correct) {
+            
+            if (selectedIndex === correctAnswerIndex) {
                 correctAnswers++;
                 consecutiveCorrect++;
                 score += 10 + (consecutiveCorrect > 1 ? 5 : 0);
@@ -2514,7 +2511,8 @@
             // Если это вопрос с пропуском, показываем полное слово с объяснением
             if (isWordWithGap && q.explanation) {
                 // Показываем правильное слово (с правильной буквой)
-                const correctLetter = q.answers[q.correct];
+                const correctLetter = q.answers[correctAnswerIndex];
+                // Заменяем подчеркивание на правильную букву
                 const correctWord = q.question.replace('_', correctLetter);
                 
                 // Обновляем текст вопроса, чтобы показать полное слово и объяснение
@@ -2791,6 +2789,7 @@
     </script>
 </body>
 </html>
+
 
 
 
