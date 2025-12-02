@@ -1304,9 +1304,124 @@
         .settings-btn:last-child {
             margin-bottom: 0;
         }
+
+        /* Система уведомлений */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+            pointer-events: none;
+        }
+
+        .notification {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.3s ease-out;
+            pointer-events: auto;
+            border-left: 4px solid;
+            min-width: 300px;
+        }
+
+        .notification.success {
+            border-left-color: #48bb78;
+        }
+
+        .notification.error {
+            border-left-color: #f56565;
+        }
+
+        .notification.warning {
+            border-left-color: #ed8936;
+        }
+
+        .notification.info {
+            border-left-color: #4299e1;
+        }
+
+        .notification-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: #e2e8f0;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .notification.hiding {
+            animation: slideOutRight 0.3s ease-in forwards;
+        }
     </style>
 </head>
 <body>
+    <!-- Контейнер для уведомлений -->
+    <div class="notification-container" id="notificationContainer"></div>
+
     <div class="game-container">
         <!-- Верхняя панель навигации -->
         <div class="top-navbar" id="topNavbar" style="display: none;">
@@ -2097,6 +2212,430 @@
                         explanation: "ПРЕдание - приставка ПРЕ- означает то же, что и приставка ПЕРЕ- (= то, что передаётся из уст в уста)"
                     }
                 ]
+            },
+            {
+                id: 101,
+                title: "Практика: ПРИ- и ПРЕ- (сложные случаи)",
+                description: "Сложные слова с приставками ПРИ- и ПРЕ-",
+                category: 'orthography',
+                arcade: false, // Не показывается в аркаде, только в разделе орфографии
+                shuffleQuestions: true, // Флаг для перемешивания вопросов
+                questions: [
+                    {
+                        question: "Пр_вередливый",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИвередливый (= слегка вредный)"
+                    },
+                    {
+                        question: "Пр_вереда",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИвереда"
+                    },
+                    {
+                        question: "Пр_чудливый",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИчудливый (= близкий к чуду)"
+                    },
+                    {
+                        question: "непр_ступный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "неПРИступный (= на приступ не возьмёшь)"
+                    },
+                    {
+                        question: "Пр_митивный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИмитивный (три буквы И подряд пишутся в этом слове)"
+                    },
+                    {
+                        question: "непр_хотливый",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "неПРИхотливый (= без прихотей)"
+                    },
+                    {
+                        question: "Пр_влекательный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИвлекательный"
+                    },
+                    {
+                        question: "Пр_лежный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИлежный"
+                    },
+                    {
+                        question: "Пр_годный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИгодный"
+                    },
+                    {
+                        question: "Пр_гожий",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИгожий (день)"
+                    },
+                    {
+                        question: "Пр_ятный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИятный"
+                    },
+                    {
+                        question: "Пр_вилегия",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИвилегия (= неотъемлемое право)"
+                    },
+                    {
+                        question: "Пр_оритет",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИоритет (= преимущество)"
+                    },
+                    {
+                        question: "Пр_ключение",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИключение"
+                    },
+                    {
+                        question: "Пр_видение",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИвидение"
+                    },
+                    {
+                        question: "Пр_чина",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИчина"
+                    },
+                    {
+                        question: "Пр_верженец",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИверженец (тот, кто к чему-то присоединяется)"
+                    },
+                    {
+                        question: "Пр_сяга",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИсяга"
+                    },
+                    {
+                        question: "Пр_сягать",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИсягать"
+                    },
+                    {
+                        question: "Пр_каз",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИказ"
+                    },
+                    {
+                        question: "Пр_казать",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИказать"
+                    },
+                    {
+                        question: "Пр_сутствовать",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИсутствовать"
+                    },
+                    {
+                        question: "Пр_урочить",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИурочить"
+                    },
+                    {
+                        question: "Пр_дираться",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИдираться"
+                    },
+                    {
+                        question: "Пр_тязать",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИтязать"
+                    },
+                    {
+                        question: "уровень пр_тязаний",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "уровень ПРИтязаний"
+                    },
+                    {
+                        question: "беспр_страстный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "бесПРИстрастный"
+                    },
+                    {
+                        question: "Пр_страстие",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИстрастие"
+                    },
+                    {
+                        question: "Пр_мадонна",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИмадонна (= актриса, исполняющая первые роли)"
+                    },
+                    {
+                        question: "Пр_ватный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИватный (= частный)"
+                    },
+                    {
+                        question: "Пр_ватизация",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИватизация"
+                    },
+                    {
+                        question: "Пр_бор",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИбор"
+                    },
+                    {
+                        question: "непр_язнь",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "неПРИязнь"
+                    },
+                    {
+                        question: "Пр_баутка",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИбаутка"
+                    },
+                    {
+                        question: "Пр_скорбный",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИскорбный"
+                    },
+                    {
+                        question: "с пр_скорбием",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "с ПРИскорбием"
+                    },
+                    {
+                        question: "без пр_крас",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "без ПРИкрас"
+                    },
+                    {
+                        question: "Пр_умножить",
+                        answers: ["е", "и"],
+                        correct: 0,
+                        explanation: "ПРИумножить"
+                    },
+                    {
+                        question: "Пр_зидент",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕзидент"
+                    },
+                    {
+                        question: "Пр_пятствие",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕпятствие"
+                    },
+                    {
+                        question: "Пр_пона",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕпона (= препятствие)"
+                    },
+                    {
+                        question: "Пр_мьера",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕмьера"
+                    },
+                    {
+                        question: "Пр_тензия",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕтензия"
+                    },
+                    {
+                        question: "Пр_тендент",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕтендент"
+                    },
+                    {
+                        question: "Пр_парат",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕпарат"
+                    },
+                    {
+                        question: "Пр_грешения",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕгрешения"
+                    },
+                    {
+                        question: "Пр_имущество",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕимущество"
+                    },
+                    {
+                        question: "Пр_амбула",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕамбула (= вводная часть)"
+                    },
+                    {
+                        question: "пр_дел терпения",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕдел терпения"
+                    },
+                    {
+                        question: "камень пр_ткновения",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "камень ПРЕткновения (= причина ссоры)"
+                    },
+                    {
+                        question: "пр_вратности судьбы",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕвратности судьбы"
+                    },
+                    {
+                        question: "знаки пр_пинания",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "знаки ПРЕпинания"
+                    },
+                    {
+                        question: "Пр_стижный",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕстижный"
+                    },
+                    {
+                        question: "беспр_дельный",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "бесПРЕдельный"
+                    },
+                    {
+                        question: "Пр_словутый",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕсловутый (= очень всем известный)"
+                    },
+                    {
+                        question: "Пр_зентация",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕзентация"
+                    },
+                    {
+                        question: "Пр_рогатива",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕрогатива (= исключительное право)"
+                    },
+                    {
+                        question: "Пр_терпевать",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕтерпевать"
+                    },
+                    {
+                        question: "Пр_валировать",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕвалировать (= преобладать)"
+                    },
+                    {
+                        question: "Пр_фектура",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕфектура"
+                    },
+                    {
+                        question: "Пр_цедент",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕцедент (= аналогичный случай в прошлом)"
+                    },
+                    {
+                        question: "Пр_увеличить",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕувеличить"
+                    },
+                    {
+                        question: "Пр_небрегать",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕНебрегать (три буквы Е подряд пишутся в этом слове)"
+                    },
+                    {
+                        question: "Пр_небрежение",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕНебрежение"
+                    },
+                    {
+                        question: "Пр_небрежительный",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕНебрежительный"
+                    },
+                    {
+                        question: "Пр_лестный",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕлестный (= вызывающий очень лестные слова)"
+                    },
+                    {
+                        question: "Пр_подобный",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕподобный (= очень праведный)"
+                    },
+                    {
+                        question: "Пр_следовать",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕследовать"
+                    },
+                    {
+                        question: "Пр_смыкаться",
+                        answers: ["е", "и"],
+                        correct: 1,
+                        explanation: "ПРЕсмыкаться"
+                    }
+                ]
             }
         ];
 
@@ -2110,7 +2649,71 @@
         let fallingWordsInterval = null;
         let questionTimeout = null;
         let consecutiveCorrect = 0;
-        let completedLevels = JSON.parse(localStorage.getItem('completedLevels') || '{}');
+        // Загрузка прогресса с обработкой ошибок
+        let completedLevels = {};
+        try {
+            const stored = localStorage.getItem('completedLevels');
+            if (stored) {
+                completedLevels = JSON.parse(stored);
+            }
+        } catch (e) {
+            console.error('Ошибка загрузки прогресса из localStorage:', e);
+            completedLevels = {};
+            showNotification('warning', 'Ошибка загрузки прогресса', 'Не удалось загрузить сохраненный прогресс. Начнется новый сеанс.', 5000);
+        }
+
+        // Система уведомлений
+        function showNotification(type, title, message, duration = 5000) {
+            const container = document.getElementById('notificationContainer');
+            if (!container) return;
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+
+            notification.innerHTML = `
+                <div class="notification-icon">${icons[type] || icons.info}</div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+            `;
+
+            container.appendChild(notification);
+
+            // Автоматическое удаление через duration
+            if (duration > 0) {
+                setTimeout(() => {
+                    notification.classList.add('hiding');
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }, duration);
+            }
+        }
+
+        // Обработка ошибок с уведомлениями
+        function handleError(error, context = '') {
+            console.error(`Ошибка${context ? ` в ${context}` : ''}:`, error);
+            
+            let errorMessage = 'Произошла ошибка';
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            }
+
+            showNotification('error', 'Ошибка', errorMessage, 7000);
+        }
 
         // Централизованная функция для переключения экранов
         function showScreen(screenId, options = {}) {
@@ -2140,7 +2743,7 @@
                     targetScreen.classList.add('with-navbar');
                 }
             } else {
-                console.error('Экран не найден:', screenId);
+                handleError(`Экран не найден: ${screenId}`, 'переключении экрана');
             }
         }
 
@@ -2186,28 +2789,55 @@
                     localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
                     console.log('Прогресс загружен из URL параметров');
                 } catch (e) {
-                    console.error('Ошибка загрузки прогресса из URL:', e);
+                    handleError(e, 'загрузке прогресса из URL');
                 }
             }
             
             // Отправляем запрос на синхронизацию прогресса с сервером
             if (tg && tg.sendData) {
-                const syncRequest = {
-                    action: 'sync_progress',
-                    completedLevels: completedLevels
-                };
-                tg.sendData(JSON.stringify(syncRequest));
+                try {
+                    const syncRequest = {
+                        action: 'sync_progress',
+                        completedLevels: completedLevels
+                    };
+                    tg.sendData(JSON.stringify(syncRequest));
+                } catch (e) {
+                    handleError(e, 'синхронизации прогресса');
+                }
             }
         }
 
         // Синхронизация прогресса с сервером
         function syncProgressToServer() {
-            if (tg && tg.sendData) {
+            if (!tg || !tg.sendData) {
+                // Сохраняем только локально, если Telegram API недоступен
+                try {
+                    localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+                    showNotification('warning', 'Офлайн режим', 'Прогресс сохранен локально. Синхронизация будет выполнена при подключении.', 5000);
+                } catch (e) {
+                    handleError(e, 'локальном сохранении прогресса');
+                }
+                return;
+            }
+
+            try {
                 const syncData = {
                     action: 'save_progress',
                     completedLevels: completedLevels
                 };
                 tg.sendData(JSON.stringify(syncData));
+                
+                // Показываем уведомление об успешной синхронизации
+                showNotification('success', 'Прогресс сохранен', 'Ваш прогресс успешно синхронизирован с сервером', 3000);
+            } catch (e) {
+                handleError(e, 'синхронизации прогресса');
+                // Пытаемся сохранить локально как резервную копию
+                try {
+                    localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+                    showNotification('warning', 'Локальное сохранение', 'Не удалось синхронизировать с сервером. Прогресс сохранен локально.', 5000);
+                } catch (localError) {
+                    handleError(localError, 'локальном сохранении');
+                }
             }
         }
 
@@ -2263,15 +2893,25 @@
 
         // Загрузка пользовательских заданий из localStorage
         function getCustomLevels(category) {
-            const key = `customLevels_${category}`;
-            const stored = localStorage.getItem(key);
-            return stored ? JSON.parse(stored) : [];
+            try {
+                const key = `customLevels_${category}`;
+                const stored = localStorage.getItem(key);
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                handleError(e, 'загрузке пользовательских заданий');
+                return [];
+            }
         }
 
         // Сохранение пользовательских заданий в localStorage
         function saveCustomLevels(category, customLevels) {
-            const key = `customLevels_${category}`;
-            localStorage.setItem(key, JSON.stringify(customLevels));
+            try {
+                const key = `customLevels_${category}`;
+                localStorage.setItem(key, JSON.stringify(customLevels));
+            } catch (e) {
+                handleError(e, 'сохранении пользовательских заданий');
+                showNotification('error', 'Ошибка сохранения', 'Не удалось сохранить задание. Проверьте доступное место в хранилище браузера.', 6000);
+            }
         }
 
         // Рендеринг экрана выбора уровней
@@ -2390,8 +3030,26 @@
         }
 
 
+        // Функция для перемешивания массива (алгоритм Фишера-Йетса)
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         // Запуск уровня
         function startLevel(level) {
+            // Если нужно перемешать вопросы, создаем копию уровня с перемешанными вопросами
+            if (level.shuffleQuestions && level.questions) {
+                level = {
+                    ...level,
+                    questions: shuffleArray(level.questions)
+                };
+            }
+            
             currentLevel = level;
             currentQuestion = 0;
             score = 0;
@@ -2532,10 +3190,10 @@
                     showQuestion();
                 }, 4000);
             } else {
-                setTimeout(() => {
-                    currentQuestion++;
-                    showQuestion();
-                }, 2000);
+            setTimeout(() => {
+                currentQuestion++;
+                showQuestion();
+            }, 2000);
             }
         }
 
@@ -2701,7 +3359,7 @@
             const questionsText = document.getElementById('levelQuestionsInput').value.trim();
 
             if (!title || !description || !questionsText) {
-                alert('Пожалуйста, заполните все поля');
+                showNotification('warning', 'Заполните все поля', 'Пожалуйста, заполните все обязательные поля', 4000);
                 return;
             }
 
@@ -2709,16 +3367,17 @@
             const questions = [];
             const lines = questionsText.split('\n').filter(line => line.trim());
             
-            for (const line of lines) {
-                const parts = line.split('|').map(p => p.trim());
-                if (parts.length !== 6) {
-                    alert(`Ошибка в формате вопроса: "${line}"\nОжидается формат: Вопрос|Ответ1|Ответ2|Ответ3|Ответ4|НомерПравильного`);
-                    return;
-                }
+            try {
+                for (const line of lines) {
+                    const parts = line.split('|').map(p => p.trim());
+                    if (parts.length !== 6) {
+                        showNotification('error', 'Ошибка формата', `Ошибка в формате вопроса: "${line}"\nОжидается формат: Вопрос|Ответ1|Ответ2|Ответ3|Ответ4|НомерПравильного`, 6000);
+                        return;
+                    }
 
-                const correctIndex = parseInt(parts[5]) - 1;
-                if (isNaN(correctIndex) || correctIndex < 0 || correctIndex > 3) {
-                    alert(`Неправильный номер правильного ответа в вопросе: "${line}"\nНомер должен быть от 1 до 4`);
+                    const correctIndex = parseInt(parts[5]) - 1;
+                    if (isNaN(correctIndex) || correctIndex < 0 || correctIndex > 3) {
+                        showNotification('error', 'Ошибка в номере ответа', `Неправильный номер правильного ответа в вопросе: "${line}"\nНомер должен быть от 1 до 4`, 6000);
                 return;
             }
 
@@ -2729,32 +3388,35 @@
                 });
             }
 
-            if (questions.length === 0) {
-                alert('Добавьте хотя бы один вопрос');
-                return;
+                if (questions.length === 0) {
+                    showNotification('warning', 'Добавьте вопросы', 'Добавьте хотя бы один вопрос', 4000);
+                    return;
+                }
+
+                // Получаем существующие задания
+                const customLevels = getCustomLevels(currentCategory);
+                
+                // Создаем новое задание
+                const newLevel = {
+                    id: `custom_${currentCategory}_${Date.now()}`,
+                    title: title,
+                    description: description,
+                    category: currentCategory,
+                    questions: questions
+                };
+
+                // Добавляем новое задание
+                customLevels.push(newLevel);
+                saveCustomLevels(currentCategory, customLevels);
+
+                // Закрываем модальное окно и обновляем список
+                closeAddLevelModal();
+                renderLevelSelect();
+                
+                showNotification('success', 'Задание добавлено', 'Новое задание успешно добавлено!', 3000);
+            } catch (e) {
+                handleError(e, 'сохранении задания');
             }
-
-            // Получаем существующие задания
-            const customLevels = getCustomLevels(currentCategory);
-            
-            // Создаем новое задание
-            const newLevel = {
-                id: `custom_${currentCategory}_${Date.now()}`,
-                title: title,
-                description: description,
-                category: currentCategory,
-                questions: questions
-            };
-
-            // Добавляем новое задание
-            customLevels.push(newLevel);
-            saveCustomLevels(currentCategory, customLevels);
-
-            // Закрываем модальное окно и обновляем список
-            closeAddLevelModal();
-            renderLevelSelect();
-            
-            alert('Задание успешно добавлено!');
         }
 
         // Возврат к выбору предмета
